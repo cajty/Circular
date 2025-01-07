@@ -1,12 +1,10 @@
 package org.ably.circular.auth;
 
 import lombok.RequiredArgsConstructor;
-import org.ably.bankingsecurity.domain.dto.LoginDTO;
-import org.ably.bankingsecurity.domain.entities.User;
-import org.ably.bankingsecurity.domain.request.LoginRequest;
-import org.ably.bankingsecurity.domain.request.RegisterRequest;
-import org.ably.bankingsecurity.mapper.UserMapper;
-import org.ably.bankingsecurity.repository.UserRepository;
+
+import org.ably.circular.security.JwtService;
+import org.ably.circular.user.UserMapper;
+import org.ably.circular.user.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
