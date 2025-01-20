@@ -3,6 +3,7 @@ package org.ably.circular.auth;
 import lombok.RequiredArgsConstructor;
 
 import org.ably.circular.security.JwtService;
+import org.ably.circular.user.User;
 import org.ably.circular.user.UserMapper;
 import org.ably.circular.user.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,7 +27,7 @@ public class AuthService {
 
     @Transactional
     public boolean signup(RegisterRequest request) {
-        User user = userMapper.toRegisterRequest(request);
+        User user = userMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User user1 = userRepository.save(user);
         if(user1 != null) {
@@ -36,7 +37,7 @@ public class AuthService {
         return false ;
     }
 
-    public LoginDTO authenticate(LoginRequest request) {
+    public LoginResponse authenticate(LoginRequest request) {
 
         User user = (User) authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -47,11 +48,8 @@ public class AuthService {
 
         String jwtToken = jwtService.generateToken(user);
 
-        return new LoginDTO(
-                jwtToken,
-                jwtService.getExpiration(),
-                user.getRole().name(),
-                userMapper.toDTO(user)
+        return new LoginResponse(
+                jwtToken
 
         );
     }

@@ -1,15 +1,12 @@
 package org.ably.circular.auth;
 
-
-
-
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-
 
 @Getter
 @Setter
@@ -17,31 +14,16 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RegisterRequest {
 
-    @NotBlank(message = "Password is required")
-    @Size(min = 8, max = 30)
-    private String password;
-
-    @NotBlank(message = "name is required")
-    @Size(min = 8, max = 30)
+    @NotBlank(message = "Name is mandatory")
     private String name;
 
-
-    @NotBlank(message = "Email is required")
+    @Email(message = "Email should be valid")
+    @NotBlank(message = "Email is mandatory")
     private String email;
 
-    @Max(value = 80)
-    @Min(value = 18)
-    @NotNull
-    private int age;
+    @NotBlank(message = "Password is mandatory")
+    @Size(min = 6, message = "Password should have at least 6 characters")
+    private String password;
 
-    @Min(value = 0)
-    private Double monthlyIncome;
-
-    @Min(value = 0)
-    private int creditScore;
-
-
-
-    private Role role = Role.USER;
 
 }

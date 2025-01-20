@@ -5,6 +5,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.ably.circular.user.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +18,11 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-//    @Value("${spring.security.jwt.secret-key}")
-    private String secretKey = "Your32CharacterLongBase64EncodedSecretKeydvererberbbe";
+    @Value("${security.jwt.secret-key}")
+    private String secretKey ;
 
 
-//    @Value("${spring.security.jwt.expiration-time}")
+    @Value("${security.jwt.expiration-time}")
     private long jwtExpiration = 864000000;
 
 
@@ -29,7 +31,7 @@ public class JwtService {
 
     public String generateToken(User user) {
         Map<String, Object> extraClaims = new HashMap<>();
-        extraClaims.put("role", user.getRole());
+        extraClaims.put("role", user.getRoles());
         return buildToken(user.getUsername(), extraClaims, jwtExpiration);
     }
 

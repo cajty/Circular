@@ -1,0 +1,182 @@
+classDiagram
+    class User {
+        -Long id
+        -String email
+        -String password
+        -String name
+        -UserStatus status
+        -Date createdAt
+        +register(RegisterRequest) AuthResponse
+        +login(LoginCredentials) AuthResponse
+        +updateProfile(UserUpdateRequest) User
+        +changePassword(PasswordChangeRequest) void
+    }
+
+    class Token {
+        + id
+        + token
+        + createdAt
+        + expiresAt
+        + validatedAt
+    }
+
+    class Role {
+        -Long id
+        -String name
+        -Date createdAt
+        +addPermission(Permission) void
+        +removePermission(Permission) void
+        +hasPermission(Permission) Boolean
+    }
+
+    class Enterprise {
+        -Long id
+        -String name
+        -String registrationNumber
+        -EnterpriseType type
+        -VerificationStatus status
+        -Date verifiedAt
+        +verify() VerificationResult
+        +updateProfile(EnterpriseRequest) void
+        +addUser(User) void
+        +removeUser(User) void
+    }
+
+    class Material {
+        -Long id
+        -String name
+        -String description
+        -Float quantity
+        -MonetaryAmount price
+        -MaterialStatus status
+        -Date listedAt
+        -Date availableUntil
+        +createListing() Material
+        +updateListing() Material
+        +reserve() ReservationResult
+    }
+
+    class MaterialCategory {
+        -Long id
+        -String name
+        -String description
+        -Boolean isActive
+        -Date createdAt
+        +create(CategoryRequest) MaterialCategory
+        +update(CategoryRequest) MaterialCategory
+        +validateMaterial(Material) Boolean
+    }
+
+    class Exchange {
+        -Long id
+        -ExchangeStatus status
+        -Date createdAt
+        -Date completedAt
+        -Float quantity
+        -MonetaryAmount price
+        +initiate() Exchange
+        +complete() ExchangeResult
+        +cancel() void
+    }
+
+    class Location {
+        -Long id
+        -String address
+        -String city
+        -String country
+        -Double latitude
+        -Double longitude
+        -LocationType type
+        +addMaterial(Material) void
+        +removeMaterial(Material) void
+    }
+
+    %% Core relationships
+    User "1" -- "*" Token : has >
+    User "*" -- "*" Role : has >
+    Enterprise "1" -- "*" User : employs >
+    User "1" -- "*" Material : employ >
+    Exchange "1" -- "1" Enterprise : has buyer >
+    Exchange "1" -- "1" Enterprise : has seller >
+    Material "1" -- "*" Exchange : involved in >
+    Location "1" -- "*" Material : stores >
+    Material "*" -- "1" MaterialCategory : belongs to >
+    Material "*" -- "1" HazardLevel : classified as >
+    MaterialCategory "*" -- "1" HazardLevel : requires minimum safety level >
+
+    %% Enumerations
+    class UserStatus {
+        <<enumeration>>
+        ACTIVE
+        INACTIVE
+        SUSPENDED
+    }
+
+    class TokenType {
+        <<enumeration>>
+        ACCESS
+        REFRESH
+    }
+
+    class TokenStatus {
+        <<enumeration>>
+        ACTIVE
+        EXPIRED
+        REVOKED
+    }
+
+    class ExchangeStatus {
+        <<enumeration>>
+        PENDING
+        IN_PROGRESS
+        COMPLETED
+        CANCELLED
+    }
+
+    class LocationType {
+        <<enumeration>>
+        WAREHOUSE
+        RECYCLING_CENTER
+        COLLECTION_POINT
+    }
+
+    class MaterialStatus {
+        <<enumeration>>
+        AVAILABLE
+        RESERVED
+        SOLD
+        EXPIRED
+    }
+
+    class EnterpriseType {
+        <<enumeration>>
+        RECYCLER
+        COLLECTOR
+        PROCESSOR
+    }
+
+    class VerificationStatus {
+        <<enumeration>>
+        PENDING
+        VERIFIED
+        REJECTED
+    }
+
+    class HazardLevel {
+        <<enumeration>>
+        NONE
+        LOW
+        MEDIUM
+        HIGH
+        EXTREME
+    }
+
+    %% Enumeration relationships
+    User "*" -- "1" UserStatus : has status >
+    Token "*" -- "1" TokenType : has type >
+    Token "*" -- "1" TokenStatus : has status >
+    Exchange "*" -- "1" ExchangeStatus : has status >
+    Location "*" -- "1" LocationType : has type >
+    Material "*" -- "1" MaterialStatus : has status >
+    Enterprise "*" -- "1" EnterpriseType : has type >
+    Enterprise "*" -- "1" VerificationStatus : has status >

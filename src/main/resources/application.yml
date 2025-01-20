@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://localhost:5432/circular_db
+    username: admin
+    password: admin
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -12,11 +12,8 @@ spring:
     hibernate:
       ddl-auto: update
 
-
-
-
 server:
-  port: ${SERVER_PORT}
+  port: 8080
 
 springdoc:
   api-docs:
@@ -25,13 +22,13 @@ springdoc:
   swagger-ui:
     enabled: true
     path: /swagger-ui.html
-  packages-to-scan: com.bankapp.server.controller
+  packages-to-scan: org.ably.circular.controller
   paths-to-match: /api/**
 
 security:
   jwt:
-    expiration-time: ${JWT_EXPIRATION}
-    secret-key: ${JWT_SECRET}
+    expiration-time: 86400000
+    secret-key: Your32CharacterLongBase64EncodedSecretKeydvererberbbe
 
 logging:
   level:

@@ -31,7 +31,7 @@ public class AuthController {
     }
     @Operation(summary = "Authenticate user")
     @PostMapping("/login")
-    public ResponseEntity<LoginDTO> authenticate(@RequestBody LoginRequest loginUserDto) {
+    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginRequest loginUserDto) {
         try {
             return ResponseEntity.ok(authService.authenticate(loginUserDto));
         } catch (Exception e) {
@@ -40,8 +40,8 @@ public class AuthController {
 
 
             return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body(new LoginDTO("Token generation failed", 0, "", null));
+                     .status(HttpStatus.UNAUTHORIZED)
+                     .body(new LoginResponse("Unauthorized"));
         }
 
      
