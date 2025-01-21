@@ -22,8 +22,15 @@ springdoc:
   swagger-ui:
     enabled: true
     path: /swagger-ui.html
-  packages-to-scan: org.ably.circular.controller
-  paths-to-match: /api/**
+    disable-swagger-default-url: true
+    display-request-duration: true
+    tags-sorter: alpha
+    operations-sorter: alpha
+  packages-to-scan: org.ably.circular
+  paths-to-match: /**
+  show-actuator: false
+  default-produces-media-type: application/json
+  default-consumes-media-type: application/json
 
 security:
   jwt:

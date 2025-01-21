@@ -2,7 +2,7 @@ package org.ably.circular.auth;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Tag(name = "Auth Controller", description = "Authentication APIs")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AuthController {
 
     private final AuthService authService;
+
+
 
 
 
@@ -41,7 +43,7 @@ public class AuthController {
 
             return ResponseEntity
                      .status(HttpStatus.UNAUTHORIZED)
-                     .body(new LoginResponse("Unauthorized"));
+                     .body(new LoginResponse());
         }
 
      
