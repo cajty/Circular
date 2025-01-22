@@ -141,12 +141,3 @@ class EnterpriseNotFoundException extends RuntimeException {
     }
 }
 
-/**
- * Mapper interface following Interface Segregation Principle
- * Single Responsibility Principle: Handles only object mapping
- */
-interface EnterpriseMapper {
-    EnterpriseResponse toResponse(Enterprise enterprise);
-    Enterprise toEntity(EnterpriseRequest request);
-    void updateEntityFromRequest(EnterpriseRequest request, Enterprise enterprise);
-}

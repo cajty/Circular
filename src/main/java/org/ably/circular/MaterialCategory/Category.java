@@ -1,4 +1,4 @@
-package org.ably.circular.recyclableMaterial;
+package org.ably.circular.MaterialCategory;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,7 +17,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "material_categories")
-public class MaterialCategory {
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

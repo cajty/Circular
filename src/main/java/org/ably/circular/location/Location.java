@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.ably.circular.enterprise.Enterprise;
-import org.ably.circular.recyclableMaterial.RecyclableMaterial;
+import org.ably.circular.recyclableMaterial.Material;
 
 import java.util.List;
 
@@ -36,5 +36,5 @@ public class Location {
     private Enterprise enterprise;
 
     @OneToMany(mappedBy = "location")
-    private List<RecyclableMaterial> materials;
+    private List<Material> materials;
 }
