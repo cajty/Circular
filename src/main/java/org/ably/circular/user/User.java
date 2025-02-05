@@ -8,7 +8,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.GenericGenerator;
 import org.ably.circular.enterprise.Enterprise;
-import org.ably.circular.recyclableMaterial.RecyclableMaterial;
+import org.ably.circular.recyclableMaterial.Material;
 import org.ably.circular.role.Role;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -90,7 +90,7 @@ public class User implements UserDetails {
         cascade = CascadeType.ALL,
         fetch = FetchType.LAZY
     )
-    private Set<RecyclableMaterial> materials;
+    private Set<Material> materials;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
