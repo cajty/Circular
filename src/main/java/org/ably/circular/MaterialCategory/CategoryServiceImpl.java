@@ -1,6 +1,7 @@
 package org.ably.circular.MaterialCategory;
 
 import lombok.RequiredArgsConstructor;
+import org.ably.circular.exception.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public void delete(Long id) {
         if (!categoryRepository.existsById(id)) {
-            throw new CategoryNotFoundException(id);
+            throw new NotFoundException("Category", id);
         }
         categoryRepository.deleteById(id);
     }
@@ -67,25 +68,20 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional(readOnly = true)
     public void existsById(Long id) {
         if (!categoryRepository.existsById(id)) {
-            throw new CategoryNotFoundException(id);
+            throw new NotFoundException("Category", id);
         }
     }
 
     private Category findEntityById(Long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new CategoryNotFoundException(id));
+                .orElseThrow(() -> new NotFoundException("Category", id));
     }
 
     private void validateCategoryRequest(CategoryRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("Category request cannot be null");
         }
-        // Add more validation rules as needed
+        //   // to continu
     }
 }
 
-class CategoryNotFoundException extends RuntimeException {
-    public CategoryNotFoundException(Long id) {
-        super("Category not found with id: " + id);
-    }
-}

@@ -1,6 +1,9 @@
 package org.ably.circular.recyclableMaterial;
 
 import lombok.RequiredArgsConstructor;
+
+
+import org.ably.circular.exception.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,9 +29,11 @@ public class MaterialServiceImpl implements MaterialService {
     public MaterialResponse create(MaterialRequest request) {
         validateMaterialRequest(request);
         Material material = materialMapper.toEntity(request);
-        material.setStatus(MaterialStatus.PENDING);
-        Material savedMaterial = materialRepository.save(material);
-        return materialMapper.toResponse(savedMaterial);
+        material.setStatus(MaterialStatus.RESERVED);
+
+        return materialMapper.toResponse(
+                materialRepository.save(material)
+        );
     }
 
     @Override
@@ -45,7 +50,7 @@ public class MaterialServiceImpl implements MaterialService {
     @Transactional
     public void delete(Long id) {
         if (!materialRepository.existsById(id)) {
-            throw new MaterialNotFoundException(id);
+            throw new NotFoundException("Material", id);
         }
         materialRepository.deleteById(id);
     }
@@ -68,31 +73,20 @@ public class MaterialServiceImpl implements MaterialService {
     @Transactional(readOnly = true)
     public void existsById(Long id) {
         if (!materialRepository.existsById(id)) {
-            throw new MaterialNotFoundException(id);
+            throw new NotFoundException("Material", id);
         }
     }
 
     private Material findEntityById(Long id) {
         return materialRepository.findById(id)
-                .orElseThrow(() -> new MaterialNotFoundException(id));
+                .orElseThrow(() -> new NotFoundException("Material", id));
     }
 
     private void validateMaterialRequest(MaterialRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("Material request cannot be null");
         }
-        // Add more validation rules as needed
+        //   // to continu
     }
 }
 
-class MaterialNotFoundException extends RuntimeException {
-    public MaterialNotFoundException(Long id) {
-        super("Material not found with id: " + id);
-    }
-}
-
-interface MaterialMapper {
-    MaterialResponse toResponse(Material material);
-    Material toEntity(MaterialRequest request);
-    void updateEntityFromRequest(MaterialRequest request, Material material);
-}

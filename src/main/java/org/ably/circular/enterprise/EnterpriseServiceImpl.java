@@ -1,6 +1,7 @@
 package org.ably.circular.enterprise;
 
 import lombok.RequiredArgsConstructor;
+import org.ably.circular.exception.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -72,7 +73,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     @Transactional
     public void delete(Long id) {
         if (!enterpriseRepository.existsById(id)) {
-            throw new EnterpriseNotFoundException(id);
+            throw new NotFoundException("Enterprise", id);
         }
         enterpriseRepository.deleteById(id);
     }
@@ -106,7 +107,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     @Transactional(readOnly = true)
     public void existsById(Long id) {
         if (!enterpriseRepository.existsById(id)) {
-            throw new EnterpriseNotFoundException(id);
+            throw new NotFoundException("Enterprise", id);
         }
     }
 
@@ -116,7 +117,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
      */
     private Enterprise findEntityById(Long id) {
         return enterpriseRepository.findById(id)
-                .orElseThrow(() -> new EnterpriseNotFoundException(id));
+                .orElseThrow(() -> new NotFoundException("Enterprise", id));
     }
 
     /**
@@ -127,17 +128,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         if (request == null) {
             throw new IllegalArgumentException("Enterprise request cannot be null");
         }
-        // Add more validation rules as needed
-    }
-}
-
-/**
- * Custom exception for better error handling
- * Single Responsibility Principle: Handles only exception scenario
- */
-class EnterpriseNotFoundException extends RuntimeException {
-    public EnterpriseNotFoundException(Long id) {
-        super("Enterprise not found with id: " + id);
+        //   // to continu
     }
 }
 

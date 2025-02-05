@@ -2,16 +2,12 @@ package org.ably.circular.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class BusinessException extends RuntimeException {
-
-    private final HttpStatus status;
-
-    public BusinessException(String message, HttpStatus status) {
-        super(message);
-        this.status = status;
+public class BusinessException extends BaseException {
+    public BusinessException(String message) {
+        super(message, HttpStatus.BAD_REQUEST, "BUSINESS_ERROR");
     }
 
-    public HttpStatus getStatus() {
-        return status;
+    public BusinessException(String message, HttpStatus status) {
+        super(message, status, "BUSINESS_ERROR");
     }
 }

@@ -26,8 +26,7 @@ public class Location {
     private String address;
     private String city;
     private String country;
-    private Double latitude;
-    private Double longitude;
+    private Integer ZipCode;
     @Enumerated(EnumType.STRING)
     private LocationType type;
 
