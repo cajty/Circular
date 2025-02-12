@@ -16,6 +16,13 @@ public class LocationServiceImpl implements LocationService {
     private final LocationRepository locationRepository;
     private final LocationMapper locationMapper;
 
+     private void validateLocationRequest(LocationRequest request) {
+        if (request == null) {
+            throw new IllegalArgumentException("Location request cannot be null");
+        }
+        // Additional validation logic
+    }
+
     @Override
     @Transactional
     public LocationResponse save(Location location) {
@@ -78,10 +85,5 @@ public class LocationServiceImpl implements LocationService {
                 .orElseThrow(() ->  new NotFoundException("Location", id));
     }
 
-    private void validateLocationRequest(LocationRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("Location request cannot be null");
-        }
-        // Additional validation logic
-    }
+
 }

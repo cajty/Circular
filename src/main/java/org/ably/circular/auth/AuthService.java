@@ -6,11 +6,14 @@ import org.ably.circular.security.JwtService;
 import org.ably.circular.user.User;
 import org.ably.circular.user.UserMapper;
 import org.ably.circular.user.UserRepository;
+import org.ably.circular.user.UserStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 
 @Service
@@ -29,6 +32,7 @@ public class AuthService {
     public boolean signup(RegisterRequest request) {
         User user = userMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setStatus(UserStatus.ACTIVE);
         User user1 = userRepository.save(user);
         if(user1 != null) {
             return true;

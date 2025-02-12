@@ -15,6 +15,13 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final TransactionMapper transactionMapper;
 
+      private void validateTransactionRequest(TransactionRequest request) {
+        if (request == null) {
+            throw new IllegalArgumentException("Transaction request cannot be null");
+        }
+        // to continu
+    }
+
     @Override
     @Transactional
     public TransactionResponse save(Transaction transaction) {
@@ -77,11 +84,5 @@ public class TransactionServiceImpl implements TransactionService {
                 .orElseThrow(() -> new NotFoundException("Transaction", id));
     }
 
-    private void validateTransactionRequest(TransactionRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("Transaction request cannot be null");
-        }
-        // to continu
-    }
 }
 

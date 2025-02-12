@@ -2,6 +2,7 @@ package org.ably.circular.transaction;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +21,7 @@ public class TransactionController {
 
     @Operation(summary = "Create a new transaction")
     @PostMapping
-    public ResponseEntity<TransactionResponse> create(@RequestBody TransactionRequest transactionRequest) {
+    public ResponseEntity<TransactionResponse> create(@Valid @RequestBody TransactionRequest transactionRequest) {
         TransactionResponse response = transactionService.create(transactionRequest);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -34,7 +35,7 @@ public class TransactionController {
 
     @Operation(summary = "Update an existing transaction")
     @PutMapping("/{id}")
-    public ResponseEntity<TransactionResponse> update(@PathVariable Long id, @RequestBody TransactionRequest transactionRequest) {
+    public ResponseEntity<TransactionResponse> update(@Valid @PathVariable Long id, @RequestBody TransactionRequest transactionRequest) {
         TransactionResponse response = transactionService.update(id, transactionRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

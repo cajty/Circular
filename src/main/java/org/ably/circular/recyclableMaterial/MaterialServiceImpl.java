@@ -17,6 +17,14 @@ public class MaterialServiceImpl implements MaterialService {
     private final MaterialRepository materialRepository;
     private final MaterialMapper materialMapper;
 
+
+    private void validateMaterialRequest(MaterialRequest request) {
+        if (request == null) {
+            throw new IllegalArgumentException("Material request cannot be null");
+        }
+        //   // to continu
+    }
+
     @Override
     @Transactional
     public MaterialResponse save(Material material) {
@@ -82,11 +90,6 @@ public class MaterialServiceImpl implements MaterialService {
                 .orElseThrow(() -> new NotFoundException("Material", id));
     }
 
-    private void validateMaterialRequest(MaterialRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("Material request cannot be null");
-        }
-        //   // to continu
-    }
+
 }
 

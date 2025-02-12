@@ -2,6 +2,7 @@ package org.ably.circular.enterprise;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +21,7 @@ public class EnterpriseController {
 
     @Operation(summary = "Create a new enterprise")
     @PostMapping
-    public ResponseEntity<EnterpriseResponse> create(@RequestBody EnterpriseRequest enterpriseRequest) {
+    public ResponseEntity<EnterpriseResponse> create(@Valid @RequestBody EnterpriseRequest enterpriseRequest) {
         EnterpriseResponse response = enterpriseService.create(enterpriseRequest);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -34,7 +35,7 @@ public class EnterpriseController {
 
     @Operation(summary = "Update an existing enterprise")
     @PutMapping("/{id}")
-    public ResponseEntity<EnterpriseResponse> update(@PathVariable Long id, @RequestBody EnterpriseRequest enterpriseRequest) {
+    public ResponseEntity<EnterpriseResponse> update(@PathVariable Long id, @Valid @RequestBody EnterpriseRequest enterpriseRequest) {
         EnterpriseResponse response = enterpriseService.update(id, enterpriseRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

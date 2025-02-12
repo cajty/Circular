@@ -2,6 +2,7 @@ package org.ably.circular.recyclableMaterial;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +21,7 @@ public class MaterialController {
 
     @Operation(summary = "Create a new material")
     @PostMapping
-    public ResponseEntity<MaterialResponse> create(@RequestBody MaterialRequest materialRequest) {
+    public ResponseEntity<MaterialResponse> create(@Valid @RequestBody MaterialRequest materialRequest) {
         MaterialResponse response = materialService.create(materialRequest);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -34,7 +35,7 @@ public class MaterialController {
 
     @Operation(summary = "Update an existing material")
     @PutMapping("/{id}")
-    public ResponseEntity<MaterialResponse> update(@PathVariable Long id, @RequestBody MaterialRequest materialRequest) {
+    public ResponseEntity<MaterialResponse> update(@PathVariable Long id,@Valid @RequestBody MaterialRequest materialRequest) {
         MaterialResponse response = materialService.update(id, materialRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
