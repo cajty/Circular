@@ -25,6 +25,13 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     private final EnterpriseRepository enterpriseRepository;
     private final EnterpriseMapper enterpriseMapper; // We'll need to create this
 
+     private void validateEnterpriseRequest(EnterpriseRequest request) {
+        if (request == null) {
+            throw new IllegalArgumentException("Enterprise request cannot be null");
+        }
+        //   // to continu
+    }
+
     /**
      * Single Responsibility Principle: Method only handles saving existing enterprise
      */
@@ -124,11 +131,6 @@ public class EnterpriseServiceImpl implements EnterpriseService {
      * Private validation method
      * Single Responsibility Principle: Handles only validation logic
      */
-    private void validateEnterpriseRequest(EnterpriseRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("Enterprise request cannot be null");
-        }
-        //   // to continu
-    }
+
 }
 

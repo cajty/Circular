@@ -2,6 +2,7 @@ package org.ably.circular.MaterialCategory;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +21,7 @@ public class CategoryController {
 
     @Operation(summary = "Create a new category")
     @PostMapping
-    public ResponseEntity<CategoryResponse> create(@RequestBody CategoryRequest categoryRequest) {
+    public ResponseEntity<CategoryResponse> create(@Valid @RequestBody CategoryRequest categoryRequest) {
         CategoryResponse response = categoryService.create(categoryRequest);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }

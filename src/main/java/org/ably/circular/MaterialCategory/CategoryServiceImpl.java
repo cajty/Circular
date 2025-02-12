@@ -15,6 +15,13 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 
+     private void validateCategoryRequest(CategoryRequest request) {
+        if (request == null) {
+            throw new IllegalArgumentException("Category request cannot be null");
+        }
+        //   // to continu
+    }
+
     @Override
     @Transactional
     public CategoryResponse save(Category category) {
@@ -77,11 +84,6 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> new NotFoundException("Category", id));
     }
 
-    private void validateCategoryRequest(CategoryRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("Category request cannot be null");
-        }
-        //   // to continu
-    }
+
 }
 
