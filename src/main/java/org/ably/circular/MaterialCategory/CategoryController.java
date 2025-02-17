@@ -53,4 +53,11 @@ public class CategoryController {
         Page<CategoryResponse> response = categoryService.findAll(pageable);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @Operation(summary = "Change that status of category by Id")
+    @GetMapping("/status/{id}")
+    public ResponseEntity<Void> changeStatus(@PathVariable Long id){
+        categoryService.changeActivityStatus(id);
+       return new  ResponseEntity<>(HttpStatus.OK);
+    }
 }

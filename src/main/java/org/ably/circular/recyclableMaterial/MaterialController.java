@@ -53,4 +53,17 @@ public class MaterialController {
         Page<MaterialResponse> response = materialService.findAll(pageable);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+     @Operation(summary = "Search materials with filters")
+    @GetMapping("/search")
+    public ResponseEntity<Page<MaterialResponse>> search(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Float minPrice,
+            @RequestParam(required = false) Float maxPrice,
+            @RequestParam(required = false) MaterialStatus status,
+            Pageable pageable) {
+        Page<MaterialResponse> response = materialService.search(name, minPrice, maxPrice, status, pageable);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 }

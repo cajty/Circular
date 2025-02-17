@@ -18,4 +18,6 @@ public interface TransactionService {
     Page<TransactionResponse> findAll(Pageable pageable);
 
     void existsById(Long id);
+
+    void changeTransactionStatus(Long id ,TransactionStatus status);
 }

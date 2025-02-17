@@ -10,6 +10,8 @@ import org.hibernate.annotations.GenericGenerator;
 import org.ably.circular.enterprise.Enterprise;
 import org.ably.circular.recyclableMaterial.Material;
 import org.ably.circular.role.Role;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
@@ -34,7 +36,10 @@ import java.util.stream.Collectors;
         @Index(name = "idx_user_email", columnList = "email", unique = true)
     }
 )
+
 @EntityListeners(AuditingEntityListener.class)
+//@SQLDelete(sql = "UPDATE users SET deleted = true, deleted_at = NOW() WHERE id = ? AND version = ?")
+//@Where(clause = "deleted = false")
 public class User implements UserDetails {
 
     @Id
@@ -63,6 +68,13 @@ public class User implements UserDetails {
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
+
+//    @Column(nullable = false)
+//    private boolean deleted = false;
+//
+//    @Column(name = "deleted_at")
+//    @Temporal(TemporalType.TIMESTAMP)
+//    private Date deletedAt;
 
     @Version
     private Long version;
