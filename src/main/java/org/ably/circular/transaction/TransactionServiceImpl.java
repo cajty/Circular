@@ -79,6 +79,16 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
 
+    @Override
+    @Transactional
+    public void changeTransactionStatus(Long id, TransactionStatus status) {
+          // add that part of that user have that autorite to do this action
+        //
+         Transaction transaction =  findEntityById(id);
+         transaction.setStatus(status);
+
+    }
+
     private Transaction findEntityById(Long id) {
         return transactionRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Transaction", id));

@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface CategoryService {
-
+    void existsById(Long id);
     CategoryResponse save(Category category);
 
     CategoryResponse create(CategoryRequest categoryRequest);
@@ -17,5 +17,7 @@ public interface CategoryService {
 
     Page<CategoryResponse> findAll(Pageable pageable);
 
-    void existsById(Long id);
+   void changeActivityStatus(Long id);
+
+
 }

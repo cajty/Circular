@@ -1,6 +1,7 @@
 package org.ably.circular.MaterialCategory;
 
 import lombok.RequiredArgsConstructor;
+import org.ably.circular.exception.DuplicateEntityException;
 import org.ably.circular.exception.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +20,24 @@ public class CategoryServiceImpl implements CategoryService {
         if (request == null) {
             throw new IllegalArgumentException("Category request cannot be null");
         }
-        //   // to continu
+      if (categoryRepository.existsByName(
+              request.getName().toLowerCase()
+      )) {
+            throw new DuplicateEntityException("Category","name",request.getName());
+      }
+     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public void existsById(Long id) {
+        if (!categoryRepository.existsById(id)) {
+            throw new NotFoundException("Category", id);
+        }
+    }
+
+     private Category findEntityById(Long id) {
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Category", id));
     }
 
     @Override
@@ -41,8 +59,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public CategoryResponse update(Long id, CategoryRequest request) {
+         validateCategoryRequest(request);
         Category existingCategory = findEntityById(id);
-        validateCategoryRequest(request);
         categoryMapper.updateEntityFromRequest(request, existingCategory);
         Category updatedCategory = categoryRepository.save(existingCategory);
         return categoryMapper.toResponse(updatedCategory);
@@ -51,9 +69,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public void delete(Long id) {
-        if (!categoryRepository.existsById(id)) {
-            throw new NotFoundException("Category", id);
-        }
+        existsById(id);
         categoryRepository.deleteById(id);
     }
 
@@ -71,17 +87,12 @@ public class CategoryServiceImpl implements CategoryService {
                 .map(categoryMapper::toResponse);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public void existsById(Long id) {
-        if (!categoryRepository.existsById(id)) {
-            throw new NotFoundException("Category", id);
-        }
-    }
 
-    private Category findEntityById(Long id) {
-        return categoryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Category", id));
+    @Override
+    @Transactional
+    public void changeActivityStatus(Long id) {
+         existsById(id);
+         categoryRepository.changeActivityStatus(id);
     }
 
 

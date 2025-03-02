@@ -15,14 +15,12 @@ import java.util.Date;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EnterpriseResponse {
-      private Long id;
+    private Long id;
     private String name;
     private String registrationNumber;
     private EnterpriseType type;
     private VerificationStatus status;
     private Date verifiedAt;
-
-
 //    private List<LocationDto> locations;
 //    private List<UserDto> users;
 }

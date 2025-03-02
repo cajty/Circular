@@ -21,6 +21,7 @@ public interface CategoryMapper {
      * Sets initial createdAt to current date and isActive to true if not provided
      */
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "name", expression = "java(request.getName().toLowerCase())")
     @Mapping(target = "createdAt", expression = "java(new java.util.Date())")
     @Mapping(target = "isActive", expression = "java(request.getIsActive() != null ? request.getIsActive() : true)")
     Category toEntity(CategoryRequest request);
@@ -30,6 +31,7 @@ public interface CategoryMapper {
      * Preserves the existing id and createdAt
      */
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "name", expression = "java(request.getName().toLowerCase())")
     @Mapping(target = "createdAt", ignore = true)
     void updateEntityFromRequest(CategoryRequest request, @MappingTarget Category category);
 }

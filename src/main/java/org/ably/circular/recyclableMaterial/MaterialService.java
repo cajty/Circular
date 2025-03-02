@@ -18,4 +18,6 @@ public interface MaterialService {
     Page<MaterialResponse> findAll(Pageable pageable);
 
     void existsById(Long id);
+
+     Page<MaterialResponse> search(String name, Float minPrice, Float maxPrice, MaterialStatus status, Pageable pageable);
 }

@@ -10,7 +10,7 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring", uses = {TransactionMapper.class})
 public interface TransactionMapper {
 
-
+   
     TransactionResponse toResponse(Transaction transaction);
 
 
