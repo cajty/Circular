@@ -18,6 +18,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
@@ -69,12 +70,8 @@ public class User implements UserDetails {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
-//    @Column(nullable = false)
-//    private boolean deleted = false;
-//
-//    @Column(name = "deleted_at")
-//    @Temporal(TemporalType.TIMESTAMP)
-//    private Date deletedAt;
+
+    private Timestamp deletedAt;
 
     @Version
     private Long version;
@@ -87,7 +84,7 @@ public class User implements UserDetails {
     )
     private Set<Token> tokens;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "user_roles",
         joinColumns = @JoinColumn(name = "user_id"),
@@ -97,9 +94,9 @@ public class User implements UserDetails {
     )
     private Set<Role> roles;
 
+
     @OneToMany(
         mappedBy = "user",
-        cascade = CascadeType.ALL,
         fetch = FetchType.LAZY
     )
     private Set<Material> materials;

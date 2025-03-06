@@ -11,6 +11,7 @@ import org.ably.circular.city.City;
 import org.ably.circular.enterprise.Enterprise;
 import org.ably.circular.recyclableMaterial.Material;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
@@ -43,4 +44,6 @@ public class Location {
 
     @OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
     private List<Material> materials;
+
+    private Timestamp deletedAt;
 }

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface CategoryRepository extends JpaRepository<Category,Long> {
     boolean existsByName(String name);
 
-    @Modifying
+   @Modifying
    @Query("UPDATE Category c SET c.isActive = CASE WHEN c.isActive = true THEN false ELSE true END WHERE c.id = :id")
-    void changeActivityStatus(Long id);
+   void changeActivityStatus(Long id);
 }

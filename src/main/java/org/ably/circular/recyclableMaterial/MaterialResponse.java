@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.ably.circular.MaterialCategory.Category;
-import org.ably.circular.location.Location;
-import org.ably.circular.user.User;
+
 
 import java.util.Date;
 
@@ -15,7 +13,6 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MaterialResponse {
-
     private Long id;
     private String name;
     private String description;
@@ -24,8 +21,7 @@ public class MaterialResponse {
     private MaterialStatus status;
     private Date listedAt;
     private Date availableUntil;
-    private Category category;
-    private User user;
+    private String categoryName;
     private HazardLevel hazardLevel;
-    private Location location;
+    private String  location;
 }

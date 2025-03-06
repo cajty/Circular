@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Getter
@@ -31,6 +32,5 @@ public class Category {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
-
 
 }

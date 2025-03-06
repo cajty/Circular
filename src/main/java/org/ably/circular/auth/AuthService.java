@@ -2,6 +2,8 @@ package org.ably.circular.auth;
 
 import lombok.RequiredArgsConstructor;
 
+import org.ably.circular.role.Role;
+import org.ably.circular.role.RoleService;
 import org.ably.circular.security.JwtService;
 import org.ably.circular.user.User;
 import org.ably.circular.user.UserMapper;
@@ -13,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.util.Set;
 
 
 @Service
@@ -25,6 +27,7 @@ public class AuthService {
     private final UserMapper userMapper;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final RoleService roleService;
 
 
 
@@ -33,6 +36,9 @@ public class AuthService {
         User user = userMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setStatus(UserStatus.ACTIVE);
+
+        Set<Role> roles = roleService.getRolesByName("USER");
+        user.setRoles(roles);
         User user1 = userRepository.save(user);
         if(user1 != null) {
             return true;
@@ -57,6 +63,8 @@ public class AuthService {
 
         );
     }
+
+
 
 
 

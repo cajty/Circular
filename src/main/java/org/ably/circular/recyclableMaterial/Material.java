@@ -10,6 +10,7 @@ import org.ably.circular.MaterialCategory.Category;
 import org.ably.circular.location.Location;
 import org.ably.circular.user.User;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Getter
@@ -62,4 +63,6 @@ public class Material {
      @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id")
     private Location location;
+
+     private Timestamp deletedAt;
 }

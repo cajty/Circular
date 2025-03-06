@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 import org.ably.circular.enterprise.Enterprise;
 
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Getter
@@ -45,4 +46,6 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "seller_id")
     private Enterprise seller;
+
+    private Timestamp deletedAt;
 }

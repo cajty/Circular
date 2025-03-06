@@ -1,6 +1,8 @@
 package org.ably.circular.enterprise;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +11,7 @@ import lombok.experimental.SuperBuilder;
 import org.ably.circular.location.Location;
 import org.ably.circular.user.User;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +30,8 @@ public class Enterprise {
 
     private String name;
 
+    @NotBlank
+    @Size(min = 5, max = 20)
     private String registrationNumber;
 
     @Enumerated(EnumType.STRING)
@@ -43,4 +48,6 @@ public class Enterprise {
 
     @OneToMany(mappedBy = "enterprise")
     private List<Location> locations;
+
+    private Timestamp deletedAt;
 }

@@ -31,11 +31,4 @@ public class Role {
     @JsonIgnore
     private List<User> user;
 
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdDate;
-
-    @LastModifiedDate
-    @Column(insertable = false)
-    private LocalDateTime lastModifiedDate;
 }
