@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.ably.circular.recyclableMaterial.MaterialForSale;
+
+import java.util.Set;
 
 @Data
 @Builder
@@ -22,6 +25,8 @@ public class TransactionRequest {
 
     @NotNull(message = "Buyer  is required")
     private Long buyerId;
+
+    private Set<MaterialForSale> materialsForSale;
 
     @NotNull(message = "Seller  is required")
     private Long sellerId;

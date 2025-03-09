@@ -11,12 +11,13 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface LocationMapper {
 
-
+    @Mapping(target = "cityName", source = "city.name")
     LocationResponse toResponse(Location location);
 
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "materials", ignore = true)
+    @Mapping(target = "city.id", source = "cityId")
     Location toEntity(LocationRequest request);
 
 

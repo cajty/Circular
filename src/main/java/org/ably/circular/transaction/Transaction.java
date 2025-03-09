@@ -7,10 +7,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.ably.circular.enterprise.Enterprise;
+import org.ably.circular.recyclableMaterial.Material;
 
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -48,6 +50,14 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "seller_id")
     private Enterprise seller;
+
+    @ManyToMany
+    @JoinTable(
+        name = "transaction_material",
+        joinColumns = @JoinColumn(name = "transaction_id"),
+        inverseJoinColumns = @JoinColumn(name = "material_id")
+    )
+    private Set<Material> materials;
 
     private Timestamp deletedAt;
 }

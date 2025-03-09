@@ -8,10 +8,12 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.ably.circular.MaterialCategory.Category;
 import org.ably.circular.location.Location;
+import org.ably.circular.transaction.Transaction;
 import org.ably.circular.user.User;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -63,6 +65,9 @@ public class Material {
      @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id")
     private Location location;
+
+     @ManyToMany(mappedBy = "materials")
+    private Set<Transaction> transactions;
 
      private Timestamp deletedAt;
 }

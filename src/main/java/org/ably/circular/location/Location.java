@@ -29,7 +29,7 @@ public class Location {
     @Column(nullable = false)
     private String address;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "city_id", nullable = false)
     @JsonBackReference
     private City city;

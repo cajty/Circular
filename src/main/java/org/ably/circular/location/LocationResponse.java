@@ -14,7 +14,6 @@ import lombok.Builder;
 public class LocationResponse {
     private Long id;
     private String address;
-    private Long cityId;
+    private String cityName;
     private LocationType type;
-    private Long enterpriseId;
 }
