@@ -35,8 +35,7 @@ public class MaterialRequest {
     @NotNull(message = "Category ID is required")
     private Long categoryId;
 
-    @NotNull(message = "User ID is required")
-    private Long userId;
+
 
     @NotNull(message = "Location ID is required")
     private Long locationId;

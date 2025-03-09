@@ -2,6 +2,7 @@ package org.ably.circular.location;
 
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -11,10 +12,12 @@ import org.ably.circular.exception.NotFoundException;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class LocationServiceImpl implements LocationService {
 
     private final LocationRepository locationRepository;
     private final LocationMapper locationMapper;
+
 
      private void validateLocationRequest(LocationRequest request) {
         if (request == null) {

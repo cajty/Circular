@@ -3,8 +3,10 @@ package org.ably.circular.recyclableMaterial;
 import lombok.RequiredArgsConstructor;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.ably.circular.exception.BusinessException;
 import org.ably.circular.exception.NotFoundException;
+import org.ably.circular.security.CurrentUserProvider;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -17,10 +19,12 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class MaterialServiceImpl implements MaterialService {
 
     private final MaterialRepository materialRepository;
     private final MaterialMapper materialMapper;
+    private final CurrentUserProvider currentUserProvider;
 
 
 //    private List<String> validateError(Long id ) {

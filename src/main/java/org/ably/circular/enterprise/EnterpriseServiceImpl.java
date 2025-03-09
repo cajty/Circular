@@ -1,21 +1,29 @@
 package org.ably.circular.enterprise;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.ably.circular.exception.NotFoundException;
+import org.ably.circular.security.CurrentUserProvider;
+import org.ably.circular.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 
 @Service
-@RequiredArgsConstructor // Constructor injection - follows Dependency Inversion Principle
-@Transactional // Transaction management for data consistency
+@RequiredArgsConstructor
+@Transactional
+@Slf4j
 public class EnterpriseServiceImpl implements EnterpriseService {
 
 
     private final EnterpriseRepository enterpriseRepository;
-    private final EnterpriseMapper enterpriseMapper; // We'll need to create this
+    private final EnterpriseMapper enterpriseMapper;
+     private final CurrentUserProvider currentUserProvider;
+
 
      private void validateEnterpriseRequest(EnterpriseRequest request) {
         if (request == null) {
@@ -38,9 +46,13 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     public EnterpriseResponse create(EnterpriseRequest request) {
         validateEnterpriseRequest(request);
         Enterprise enterprise = enterpriseMapper.toEntity(request);
-        enterprise.setStatus(VerificationStatus.PENDING); // Business logic
-        Enterprise savedEnterprise = enterpriseRepository.save(enterprise);
-        return enterpriseMapper.toResponse(savedEnterprise);
+        enterprise.setStatus(VerificationStatus.PENDING);
+
+        UUID useId = currentUserProvider.getCurrentUserOrThrow().getId();
+
+        enterprise.setVerifiedBy(useId);
+        return save(enterprise);
+
     }
 
 
@@ -50,7 +62,6 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         Enterprise existingEnterprise = findEntityById(id);
         validateEnterpriseRequest(request);
 
-        // Partial update pattern - only update non-null fields
         enterpriseMapper.updateEntityFromRequest(request, existingEnterprise);
 
         Enterprise updatedEnterprise = enterpriseRepository.save(existingEnterprise);
@@ -69,7 +80,6 @@ public class EnterpriseServiceImpl implements EnterpriseService {
 
 
     @Override
-    @Transactional(readOnly = true) // Optimization for read operations
     public EnterpriseResponse findById(Long id) {
         Enterprise enterprise = findEntityById(id);
         return enterpriseMapper.toResponse(enterprise);
@@ -91,9 +101,9 @@ public class EnterpriseServiceImpl implements EnterpriseService {
             throw new NotFoundException("Enterprise", id);
         }
     }
-
-
-    private Enterprise findEntityById(Long id) {
+    @Override
+    @Transactional(readOnly = true)
+    public Enterprise findEntityById(Long id) {
         return enterpriseRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Enterprise", id));
     }

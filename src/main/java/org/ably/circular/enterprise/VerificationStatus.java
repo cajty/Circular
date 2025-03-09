@@ -1,7 +1,8 @@
 package org.ably.circular.enterprise;
 
 public enum VerificationStatus {
-     PENDING,
+    PENDING,
+    UNDER_REVIEW,
     VERIFIED,
     REJECTED
 }

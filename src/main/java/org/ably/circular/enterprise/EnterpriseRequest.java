@@ -4,18 +4,16 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.ably.circular.location.LocationRequest;
 import org.ably.circular.location.LocationType;
 import org.ably.circular.validation.EnumValue;
 
-@Data
-@Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class EnterpriseRequest {
 
     @NotBlank(message = "Enterprise name is required")
@@ -28,9 +26,7 @@ public class EnterpriseRequest {
 
     @NotNull(message = "Enterprise type is required")
     @EnumValue(enumClass = EnterpriseType.class, message = "Invalid enterprise type")
-    private EnterpriseType type;
+    private EnterpriseType enterpriseType;
 
-    @Valid
-    @NotNull(message = "Location request is required")
-    private LocationRequest locationRequest;
+
 }

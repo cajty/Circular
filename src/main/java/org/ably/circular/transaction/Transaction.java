@@ -37,6 +37,8 @@ public class Transaction {
     private Float quantity;
 
 
+
+
     private Float price;
 
     @ManyToOne
