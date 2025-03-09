@@ -9,6 +9,7 @@ import org.ably.circular.enterprise.VerificationStatus;
 import org.ably.circular.exception.BusinessException;
 import org.ably.circular.exception.NotFoundException;
 import org.ably.circular.security.CurrentUserProvider;
+import org.ably.circular.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +35,7 @@ public class VerificationServiceImpl implements VerificationService {
     private final VerificationDocumentRepository verificationDocumentRepository;
     private final VerificationMapper verificationMapper;
     private final CurrentUserProvider currentUserProvider;
+    private final UserService userService;
 
     private final String UPLOAD_DIR = "uploads/verification-documents/";
 
@@ -69,6 +71,8 @@ public class VerificationServiceImpl implements VerificationService {
 
 
         VerificationDocument document = new VerificationDocument();
+         UUID useId = currentUserProvider.getCurrentUserIdOrThrow();
+         document.setUploadedBy(useId);
         document.setEnterprise(enterprise);
         document.setDocumentType(request.getDocumentType());
         document.setFileName(originalFilename);

@@ -31,7 +31,7 @@ public class Location {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "city_id", nullable = false)
-    @JsonBackReference // tells Jackson to only serialize the parent-to-child direction
+    @JsonBackReference
     private City city;
 
     @Enumerated(EnumType.STRING)

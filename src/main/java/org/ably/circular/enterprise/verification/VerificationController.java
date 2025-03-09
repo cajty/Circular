@@ -29,7 +29,7 @@ public class VerificationController {
 
     @Operation(summary = "Upload a document for verification")
     @PostMapping(value = "/documents", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 public ResponseEntity<VerificationDocumentResponse> uploadDocument(
         @ModelAttribute VerificationDocumentRequest request) throws IOException {
 
@@ -52,7 +52,7 @@ public ResponseEntity<VerificationDocumentResponse> uploadDocument(
 
     @Operation(summary = "Get documents for an enterprise")
     @GetMapping("/documents/{enterpriseId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<VerificationDocumentResponse>> getDocuments(
             @PathVariable Long enterpriseId) {
 

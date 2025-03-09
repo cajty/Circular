@@ -23,5 +23,4 @@ public class MaterialResponse {
     private Date availableUntil;
     private String categoryName;
     private HazardLevel hazardLevel;
-    private String  location;
 }

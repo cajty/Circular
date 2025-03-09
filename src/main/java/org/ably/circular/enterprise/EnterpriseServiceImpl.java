@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.ably.circular.exception.NotFoundException;
 import org.ably.circular.security.CurrentUserProvider;
 import org.ably.circular.user.User;
+import org.ably.circular.user.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,8 @@ public class EnterpriseServiceImpl implements EnterpriseService {
 
     private final EnterpriseRepository enterpriseRepository;
     private final EnterpriseMapper enterpriseMapper;
-     private final CurrentUserProvider currentUserProvider;
+    private final CurrentUserProvider currentUserProvider;
+
 
 
      private void validateEnterpriseRequest(EnterpriseRequest request) {
@@ -48,7 +50,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         Enterprise enterprise = enterpriseMapper.toEntity(request);
         enterprise.setStatus(VerificationStatus.PENDING);
 
-        UUID useId = currentUserProvider.getCurrentUserOrThrow().getId();
+        UUID useId = currentUserProvider.getCurrentUserIdOrThrow();
 
         enterprise.setVerifiedBy(useId);
         return save(enterprise);

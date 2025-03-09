@@ -25,7 +25,7 @@ public class EnterpriseRequest {
     private String registrationNumber;
 
     @NotNull(message = "Enterprise type is required")
-    @EnumValue(enumClass = EnterpriseType.class, message = "Invalid enterprise type")
+//    @EnumValue(enumClass = EnterpriseType.class, message = "Invalid enterprise type")
     private EnterpriseType enterpriseType;
 
 

@@ -3,8 +3,7 @@ package org.ably.circular.security;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ably.circular.user.User;
-import org.ably.circular.user.UserService;
-import org.springframework.cache.annotation.Cacheable;
+import org.ably.circular.user.UserServiceImpl;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Slf4j
@@ -19,7 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CurrentUserProvider {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
 
     public Optional<User> getCurrentUser() {
@@ -42,6 +42,10 @@ public class CurrentUserProvider {
     public User getCurrentUserOrThrow() {
         return getCurrentUser()
                 .orElseThrow(() -> new SecurityException("User is not authenticated"));
+    }
+
+    public UUID getCurrentUserIdOrThrow(){
+        return  getCurrentUserOrThrow().getId();
     }
 
 
