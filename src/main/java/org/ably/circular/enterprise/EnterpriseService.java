@@ -17,8 +17,9 @@ public interface EnterpriseService {
 
      Page<EnterpriseResponse> findAll(Pageable pageable);
 
-
     void existsById(Long id);
+
+    Enterprise findEntityById(Long id);
 
 
 

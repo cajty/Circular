@@ -1,17 +1,15 @@
 package org.ably.circular.enterprise.verification;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 import java.util.UUID;
 
-@Data
-@Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class VerificationDocumentResponse {
     private Long id;
     private String documentType;

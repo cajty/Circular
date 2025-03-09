@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.ably.circular.location.Location;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -25,4 +27,9 @@ public class City {
     @OneToMany(mappedBy = "city", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Location> locations;
+
+     private Boolean isActive;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
 }

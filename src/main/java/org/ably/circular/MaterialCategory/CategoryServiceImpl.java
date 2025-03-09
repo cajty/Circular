@@ -1,6 +1,7 @@
 package org.ably.circular.MaterialCategory;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.ably.circular.exception.DuplicateEntityException;
 import org.ably.circular.exception.NotFoundException;
 import org.springframework.data.domain.Page;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;

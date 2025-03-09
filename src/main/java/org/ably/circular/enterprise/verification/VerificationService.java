@@ -1,5 +1,7 @@
 package org.ably.circular.enterprise.verification;
 
+import org.ably.circular.enterprise.Enterprise;
+import org.ably.circular.enterprise.EnterpriseResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -8,10 +10,11 @@ import java.util.UUID;
 
 public interface VerificationService {
 
-    VerificationDocumentResponse uploadDocument(Long enterpriseId, String documentType, MultipartFile file, UUID userId)
-            throws IOException;
+     VerificationDocumentResponse save(VerificationDocument verificationDocument);
 
-    void updateVerificationStatus(VerificationStatusUpdateRequest request, UUID userId);
+    VerificationDocumentResponse uploadDocument(VerificationDocumentRequest request) throws IOException;
+
+    void updateVerificationStatus(VerificationStatusUpdateRequest request);
 
     List<VerificationDocumentResponse> getDocumentsForEnterprise(Long enterpriseId);
 }

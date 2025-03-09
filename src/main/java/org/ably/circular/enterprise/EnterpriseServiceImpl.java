@@ -1,40 +1,38 @@
 package org.ably.circular.enterprise;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.ably.circular.exception.NotFoundException;
+import org.ably.circular.security.CurrentUserProvider;
+import org.ably.circular.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Implementation of EnterpriseService following SOLID principles:
- *
- * S (Single Responsibility): Each method handles one specific task
- * O (Open/Closed): Extended through composition and new implementations
- * L (Liskov Substitution): Follows contract defined by EnterpriseService interface
- * I (Interface Segregation): Uses focused interface without unnecessary methods
- * D (Dependency Inversion): Depends on abstractions (interfaces) not concrete implementations
- */
+import java.util.UUID;
+
+
 @Service
-@RequiredArgsConstructor // Constructor injection - follows Dependency Inversion Principle
-@Transactional // Transaction management for data consistency
+@RequiredArgsConstructor
+@Transactional
+@Slf4j
 public class EnterpriseServiceImpl implements EnterpriseService {
 
-    // Final fields with constructor injection - Better for testing and loose coupling
+
     private final EnterpriseRepository enterpriseRepository;
-    private final EnterpriseMapper enterpriseMapper; // We'll need to create this
+    private final EnterpriseMapper enterpriseMapper;
+     private final CurrentUserProvider currentUserProvider;
+
 
      private void validateEnterpriseRequest(EnterpriseRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("Enterprise request cannot be null");
         }
-        //   // to continu
+
     }
 
-    /**
-     * Single Responsibility Principle: Method only handles saving existing enterprise
-     */
+
     @Override
     @Transactional
     public EnterpriseResponse save(Enterprise enterprise) {
@@ -42,40 +40,35 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         return enterpriseMapper.toResponse(savedEnterprise);
     }
 
-    /**
-     * Single Responsibility Principle: Method only handles creating new enterprise
-     * Open/Closed Principle: New validation rules can be added without modifying existing code
-     */
+
     @Override
     @Transactional
     public EnterpriseResponse create(EnterpriseRequest request) {
         validateEnterpriseRequest(request);
         Enterprise enterprise = enterpriseMapper.toEntity(request);
-        enterprise.setStatus(VerificationStatus.PENDING); // Business logic
-        Enterprise savedEnterprise = enterpriseRepository.save(enterprise);
-        return enterpriseMapper.toResponse(savedEnterprise);
+        enterprise.setStatus(VerificationStatus.PENDING);
+
+        UUID useId = currentUserProvider.getCurrentUserOrThrow().getId();
+
+        enterprise.setVerifiedBy(useId);
+        return save(enterprise);
+
     }
 
-    /**
-     * Single Responsibility Principle: Method only handles updating existing enterprise
-     * Liskov Substitution Principle: Maintains the contract defined in interface
-     */
+
     @Override
     @Transactional
     public EnterpriseResponse update(Long id, EnterpriseRequest request) {
         Enterprise existingEnterprise = findEntityById(id);
         validateEnterpriseRequest(request);
 
-        // Partial update pattern - only update non-null fields
         enterpriseMapper.updateEntityFromRequest(request, existingEnterprise);
 
         Enterprise updatedEnterprise = enterpriseRepository.save(existingEnterprise);
         return enterpriseMapper.toResponse(updatedEnterprise);
     }
 
-    /**
-     * Single Responsibility Principle: Method only handles deletion
-     */
+
     @Override
     @Transactional
     public void delete(Long id) {
@@ -85,21 +78,14 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         enterpriseRepository.deleteById(id);
     }
 
-    /**
-     * Single Responsibility Principle: Method only handles finding by ID
-     * Open/Closed Principle: Error handling can be extended without modifying method
-     */
+
     @Override
-    @Transactional(readOnly = true) // Optimization for read operations
     public EnterpriseResponse findById(Long id) {
         Enterprise enterprise = findEntityById(id);
         return enterpriseMapper.toResponse(enterprise);
     }
 
-    /**
-     * Single Responsibility Principle: Method only handles pagination
-     * Open/Closed Principle: Sorting and filtering can be added without modification
-     */
+
     @Override
     @Transactional(readOnly = true)
     public Page<EnterpriseResponse> findAll(Pageable pageable) {
@@ -107,9 +93,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
                 .map(enterpriseMapper::toResponse);
     }
 
-    /**
-     * Single Responsibility Principle: Method only checks existence
-     */
+
     @Override
     @Transactional(readOnly = true)
     public void existsById(Long id) {
@@ -117,20 +101,14 @@ public class EnterpriseServiceImpl implements EnterpriseService {
             throw new NotFoundException("Enterprise", id);
         }
     }
-
-    /**
-     * Private helper method for finding entity
-     * DRY Principle: Reuse common functionality
-     */
-    private Enterprise findEntityById(Long id) {
+    @Override
+    @Transactional(readOnly = true)
+    public Enterprise findEntityById(Long id) {
         return enterpriseRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Enterprise", id));
     }
 
-    /**
-     * Private validation method
-     * Single Responsibility Principle: Handles only validation logic
-     */
+
 
 }
 

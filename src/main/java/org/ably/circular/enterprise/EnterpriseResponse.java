@@ -1,18 +1,16 @@
 package org.ably.circular.enterprise;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
 
-@Data
-@Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EnterpriseResponse {
     private Long id;

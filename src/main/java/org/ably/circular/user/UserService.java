@@ -1,15 +1,20 @@
 package org.ably.circular.user;
 
 
+import lombok.extern.slf4j.Slf4j;
+import org.ably.circular.exception.NotFoundException;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 
 
 @Service
+@Slf4j
 public class UserService {
 
     private final UserRepository  userRepository;
@@ -54,9 +59,10 @@ public class UserService {
 
     public void delete(UUID id) {userRepository.deleteById(id);}
 
-
+    @Cacheable(value = "userCache", key = "#email")
+    @Transactional(readOnly = true)
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+        return userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("User", email));
     }
 
 

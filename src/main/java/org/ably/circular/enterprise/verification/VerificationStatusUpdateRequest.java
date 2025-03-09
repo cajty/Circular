@@ -8,9 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.ably.circular.enterprise.VerificationStatus;
 
-/**
- * DTO for updating verification status
- */
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -27,6 +25,3 @@ public class VerificationStatusUpdateRequest {
     private String reason;
 }
 
-/**
- * DTO for verification document response
- */
