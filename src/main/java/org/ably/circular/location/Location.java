@@ -42,7 +42,7 @@ public class Location {
     @JoinColumn(name = "enterprise_id")
     private Enterprise enterprise;
 
-    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "location")
     private List<Material> materials;
 
     private Timestamp deletedAt;

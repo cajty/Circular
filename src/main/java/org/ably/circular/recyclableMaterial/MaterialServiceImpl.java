@@ -95,16 +95,16 @@ public class MaterialServiceImpl implements MaterialService {
         Material existingMaterial = findEntityById(id);
 //        validateMaterialRequest(request);
         materialMapper.updateEntityFromRequest(request, existingMaterial);
-        Material updatedMaterial = materialRepository.save(existingMaterial);
-        return materialMapper.toResponse(updatedMaterial);
+        return materialMapper.toResponse(existingMaterial);
     }
 
     @Override
     @Transactional
     public void delete(Long id) {
-        if (!materialRepository.existsById(id)) {
-            throw new NotFoundException("Material", id);
-        }
+        Material material = findEntityById(id);
+       if (material.getStatus() != MaterialStatus.AVAILABLE) {
+           throw new BusinessException("Only available materials can be deleted", HttpStatus.BAD_REQUEST);
+       }
         materialRepository.deleteById(id);
     }
 
@@ -128,6 +128,9 @@ public class MaterialServiceImpl implements MaterialService {
         return materialRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Material", id));
     }
+
+
+
 
 
 }

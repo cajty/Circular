@@ -4,10 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-/**
- * MapStruct mapper for Location entity and DTOs
- * Uses Spring component model for automatic dependency injection
- */
+
 @Mapper(componentModel = "spring")
 public interface LocationMapper {
 

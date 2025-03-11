@@ -5,5 +5,4 @@ public enum MaterialStatus {
     RESERVED,
     SOLD,
     EXPIRED,
-    PENDING
 }

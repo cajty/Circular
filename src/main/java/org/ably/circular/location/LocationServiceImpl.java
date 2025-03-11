@@ -3,6 +3,7 @@ package org.ably.circular.location;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.ably.circular.exception.BusinessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -48,17 +49,18 @@ public class LocationServiceImpl implements LocationService {
         Location existingLocation = findEntityById(id);
         validateLocationRequest(request);
         locationMapper.updateEntityFromRequest(request, existingLocation);
-        Location updatedLocation = locationRepository.save(existingLocation);
-        return locationMapper.toResponse(updatedLocation);
+        return locationMapper.toResponse(existingLocation);
     }
 
     @Override
     @Transactional
     public void delete(Long id) {
-        if (!locationRepository.existsById(id)) {
-            throw  new NotFoundException("Location", id);
+        Location location = findEntityById(id);
+        if(location.getMaterials().isEmpty()){
+            locationRepository.delete(location);
+        }else{
+            throw new BusinessException("Location has associated materials and cannot be deleted");
         }
-        locationRepository.deleteById(id);
     }
 
     @Override
