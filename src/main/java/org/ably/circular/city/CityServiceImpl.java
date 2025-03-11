@@ -3,8 +3,6 @@ package org.ably.circular.city;
 import lombok.RequiredArgsConstructor;
 import org.ably.circular.exception.DuplicateEntityException;
 import org.ably.circular.exception.NotFoundException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,5 +93,13 @@ public class CityServiceImpl implements CityService {
     public void changeActivityStatus(Long id) {
         existsById(id);
         cityRepository.changeActivityStatus(id);
+    }
+
+    @Override
+    @Transactional
+    public Set<ActiveCityResponse> getAllActiveCities() {
+        return cityRepository.findAllByIsActiveTrue().stream()
+                .map(cityMapper::toActiveCityResponse)
+                .collect(Collectors.toSet());
     }
 }

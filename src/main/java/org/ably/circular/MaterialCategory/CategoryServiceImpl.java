@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -99,6 +101,11 @@ public class CategoryServiceImpl implements CategoryService {
     } catch (Exception e) {
         throw new IllegalStateException("Failed to update activity status for City with ID " + id, e);
     }
+    }
+
+    @Override
+    public Set<Category> findAllActiveCategory() {
+        return categoryRepository.findAllByIsActiveTrue();
     }
 
 

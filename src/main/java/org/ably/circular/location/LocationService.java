@@ -3,6 +3,8 @@ package org.ably.circular.location;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Set;
+
 public interface LocationService {
 
     LocationResponse save(Location location);
@@ -18,4 +20,8 @@ public interface LocationService {
     Page<LocationResponse> findAll(Pageable pageable);
 
     void existsById(Long id);
+
+    Set<ActiveLocationResponse> getAllActiveLocations();
+
+    Set<ActiveLocationResponse> getAllLocationOfEnterprise();
 }

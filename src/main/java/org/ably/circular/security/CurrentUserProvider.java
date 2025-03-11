@@ -2,6 +2,7 @@ package org.ably.circular.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.ably.circular.enterprise.Enterprise;
 import org.ably.circular.user.User;
 import org.ably.circular.user.UserServiceImpl;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -46,6 +47,10 @@ public class CurrentUserProvider {
 
     public UUID getCurrentUserIdOrThrow(){
         return  getCurrentUserOrThrow().getId();
+    }
+
+    public Enterprise getCurrentUserEnterpriseOrThrow(){
+        return   getCurrentUserOrThrow().getEnterprise();
     }
 
 

@@ -125,6 +125,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
              user.setRoles(
                      roleService.getRolesByName("MANAGER")
              );
+             user.setEnterprise(enterprise);
          }
     }
 

@@ -3,6 +3,8 @@ package org.ably.circular.MaterialCategory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Set;
+
 public interface CategoryService {
     void existsById(Long id);
     CategoryResponse save(Category category);
@@ -18,6 +20,8 @@ public interface CategoryService {
     Page<CategoryResponse> findAll(Pageable pageable);
 
    void changeActivityStatus(Long id);
+
+     Set<Category> findAllActiveCategory();
 
 
 }

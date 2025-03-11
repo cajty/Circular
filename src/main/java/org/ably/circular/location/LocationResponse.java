@@ -16,4 +16,5 @@ public class LocationResponse {
     private String address;
     private String cityName;
     private LocationType type;
+     private Boolean isActive;
 }

@@ -9,8 +9,14 @@ import org.mapstruct.MappingTarget;
 public interface LocationMapper {
 
     @Mapping(target = "cityName", source = "city.name")
+    @Mapping(target = "isActive", source = "isActive")
     LocationResponse toResponse(Location location);
 
+
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "address", source = "address")
+    @Mapping(target = "cityName", source = "city.name")
+    ActiveLocationResponse toActiveLocationResponse(Location location);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "materials", ignore = true)

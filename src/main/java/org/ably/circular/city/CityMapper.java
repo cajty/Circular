@@ -11,6 +11,10 @@ public interface CityMapper {
 
     CityResponse toResponse(City city);
 
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "name", source = "name")
+    ActiveCityResponse toActiveCityResponse(City city);
+
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "name", expression = "java(request.getName().toLowerCase())")

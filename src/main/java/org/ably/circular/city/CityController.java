@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/cities")
@@ -62,4 +63,10 @@ public class CityController {
         cityService.changeActivityStatus(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+     @Operation(summary = "Get all active cities")
+     @GetMapping("/active")
+     public ResponseEntity<Set<ActiveCityResponse>> getAllActiveCities() {
+         Set<ActiveCityResponse> response = cityService.getAllActiveCities();
+         return new ResponseEntity<>(response, HttpStatus.OK);
+     }
 }

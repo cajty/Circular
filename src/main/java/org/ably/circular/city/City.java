@@ -24,8 +24,7 @@ public class City {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @OneToMany(mappedBy = "city")
     private List<Location> locations;
 
      private Boolean isActive;

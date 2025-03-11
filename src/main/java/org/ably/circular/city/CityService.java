@@ -1,8 +1,5 @@
 package org.ably.circular.city;
 
-import org.springframework.data.domain.Page;
-import  org.springframework.data.domain.Pageable;
-
 import java.util.Set;
 
 public interface CityService {
@@ -21,4 +18,6 @@ public interface CityService {
    Set<CityResponse> findAll();
 
     void changeActivityStatus(Long id);
+    Set<ActiveCityResponse> getAllActiveCities();
+
 }

@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 @RestController
 @RequestMapping("/categories")
 @AllArgsConstructor
@@ -60,4 +62,12 @@ public class CategoryController {
         categoryService.changeActivityStatus(id);
        return new  ResponseEntity<>(HttpStatus.OK);
     }
+
+    @Operation(summary = "get all active category")
+    @GetMapping("/active-category")
+    public ResponseEntity<Set<Category>> getAllActiveCategory(){
+        Set<Category> response = categoryService.findAllActiveCategory();
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
 }

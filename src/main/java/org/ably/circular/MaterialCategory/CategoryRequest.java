@@ -1,6 +1,7 @@
 package org.ably.circular.MaterialCategory;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,5 +20,6 @@ public class CategoryRequest {
     @Size(max = 500, message = "Description cannot exceed 500 characters")
     private String description;
 
+    @NotNull(message = "is active is required")
     private Boolean isActive;
 }

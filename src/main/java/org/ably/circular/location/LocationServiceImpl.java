@@ -3,12 +3,17 @@ package org.ably.circular.location;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.ably.circular.enterprise.Enterprise;
 import org.ably.circular.exception.BusinessException;
+import org.ably.circular.security.CurrentUserProvider;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ably.circular.exception.NotFoundException;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,9 +23,10 @@ public class LocationServiceImpl implements LocationService {
 
     private final LocationRepository locationRepository;
     private final LocationMapper locationMapper;
+    private final CurrentUserProvider currentUserProvider;
 
 
-     private void validateLocationRequest(LocationRequest request) {
+    private void validateLocationRequest(LocationRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("Location request cannot be null");
         }
@@ -39,6 +45,9 @@ public class LocationServiceImpl implements LocationService {
     public LocationResponse create(LocationRequest request) {
         validateLocationRequest(request);
         Location location = locationMapper.toEntity(request);
+         Enterprise enterprise = currentUserProvider.getCurrentUserEnterpriseOrThrow();
+         location.setEnterprise(enterprise);
+
         Location savedLocation = locationRepository.save(location);
         return locationMapper.toResponse(savedLocation);
     }
@@ -83,6 +92,23 @@ public class LocationServiceImpl implements LocationService {
         if (!locationRepository.existsById(id)) {
             throw   new NotFoundException("Location", id);
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Set<ActiveLocationResponse> getAllActiveLocations() {
+         return locationRepository.findAllByIsActiveTrue().stream()
+                .map(locationMapper::toActiveLocationResponse)
+                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Set<ActiveLocationResponse> getAllLocationOfEnterprise() {
+         Long enterpriseId = currentUserProvider.getCurrentUserEnterpriseOrThrow().getId();
+        return locationRepository.findAllByEnterprise_Id(enterpriseId).stream()
+                .map(locationMapper::toActiveLocationResponse)
+                .collect(Collectors.toSet());
     }
 
     private Location findEntityById(Long id) {

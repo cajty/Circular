@@ -26,6 +26,7 @@ public class LocationRequest {
     @EnumValue(enumClass = LocationType.class, message = "Invalid location type")
     private LocationType type;
 
-    @NotNull(message = "Enterprise ID is required")
-    private Long enterpriseId;
+    @NotNull(message = "is active is required")
+    private Boolean isActive;
+
 }

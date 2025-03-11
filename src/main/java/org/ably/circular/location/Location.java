@@ -10,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 import org.ably.circular.city.City;
 import org.ably.circular.enterprise.Enterprise;
 import org.ably.circular.recyclableMaterial.Material;
+import org.mapstruct.Mapping;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -31,12 +32,14 @@ public class Location {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "city_id", nullable = false)
-    @JsonBackReference
     private City city;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private LocationType type;
+
+
+    private Boolean isActive;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "enterprise_id")

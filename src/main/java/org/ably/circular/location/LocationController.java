@@ -6,7 +6,11 @@ import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/location")
@@ -36,5 +40,19 @@ public class LocationController {
         locationService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT) ;
     }
+
+    @Operation(summary = "get active location ")
+   @GetMapping("/active")
+   public ResponseEntity<Set<ActiveLocationResponse>> getAllActiveLocations() {
+       Set<ActiveLocationResponse> response = locationService.getAllActiveLocations();
+       return new ResponseEntity<>(response, HttpStatus.OK);
+   }
+
+   @Operation(summary = "get all that location of enterprise")
+   @GetMapping("/enterprise")
+   public ResponseEntity<Set<ActiveLocationResponse>> getAllLocationOfEnterprise() {
+       Set<ActiveLocationResponse> response = locationService.getAllLocationOfEnterprise();
+       return new ResponseEntity<>(response, HttpStatus.OK);
+   }
 
 }
