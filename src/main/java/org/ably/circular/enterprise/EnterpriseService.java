@@ -21,6 +21,8 @@ public interface EnterpriseService {
 
     Enterprise findEntityById(Long id);
 
+    void updateVerificationStatus(VerificationStatusUpdateRequest request);
+
 
 
 

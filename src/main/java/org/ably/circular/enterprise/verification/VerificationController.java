@@ -38,17 +38,7 @@ public ResponseEntity<VerificationDocumentResponse> uploadDocument(
     return new ResponseEntity<>(response, HttpStatus.CREATED);
 }
 
-    @Operation(summary = "Update verification status")
-    @PostMapping("/status")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> updateVerificationStatus(
-            @Valid @RequestBody VerificationStatusUpdateRequest request) {
 
-
-        verificationService.updateVerificationStatus(request);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 
     @Operation(summary = "Get documents for an enterprise")
     @GetMapping("/documents/{enterpriseId}")

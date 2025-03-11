@@ -33,6 +33,17 @@ public class EnterpriseController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(summary = "Update verification status")
+    @PostMapping("/status")
+//    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> updateVerificationStatus(
+            @Valid @RequestBody VerificationStatusUpdateRequest request) {
+
+        enterpriseService.updateVerificationStatus(request);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @Operation(summary = "Update an existing enterprise")
     @PutMapping("/{id}")
     public ResponseEntity<EnterpriseResponse> update(@PathVariable Long id, @Valid @RequestBody EnterpriseRequest enterpriseRequest) {
@@ -46,6 +57,7 @@ public class EnterpriseController {
         enterpriseService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
     @Operation(summary = "Get all enterprises with pagination")
     @GetMapping

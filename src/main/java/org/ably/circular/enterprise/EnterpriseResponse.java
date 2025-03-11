@@ -19,6 +19,4 @@ public class EnterpriseResponse {
     private EnterpriseType type;
     private VerificationStatus status;
     private Date verifiedAt;
-//    private List<LocationDto> locations;
-//    private List<UserDto> users;
 }

@@ -3,9 +3,10 @@ package org.ably.circular.enterprise;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ably.circular.exception.NotFoundException;
+import org.ably.circular.role.AppRole;
+import org.ably.circular.role.RoleService;
 import org.ably.circular.security.CurrentUserProvider;
 import org.ably.circular.user.User;
-import org.ably.circular.user.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     private final EnterpriseRepository enterpriseRepository;
     private final EnterpriseMapper enterpriseMapper;
     private final CurrentUserProvider currentUserProvider;
+    private final RoleService roleService;
 
 
 
@@ -103,6 +105,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
             throw new NotFoundException("Enterprise", id);
         }
     }
+
     @Override
     @Transactional(readOnly = true)
     public Enterprise findEntityById(Long id) {
@@ -110,6 +113,20 @@ public class EnterpriseServiceImpl implements EnterpriseService {
                 .orElseThrow(() -> new NotFoundException("Enterprise", id));
     }
 
+    @Override
+    @Transactional
+    public void updateVerificationStatus(VerificationStatusUpdateRequest request) {
+         Enterprise enterprise = findEntityById(request.getEnterpriseId());
+         enterprise.setStatus(request.getNewStatus());
+         enterprise.setRejectionReason(request.getReason());
+
+         if(request.getNewStatus() == VerificationStatus.VERIFIED){
+             User user = currentUserProvider.getCurrentUserOrThrow();
+             user.setRoles(
+                     roleService.getRolesByName("MANAGER")
+             );
+         }
+    }
 
 
 }

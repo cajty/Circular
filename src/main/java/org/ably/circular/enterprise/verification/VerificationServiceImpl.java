@@ -6,7 +6,6 @@ import org.ably.circular.enterprise.Enterprise;
 import org.ably.circular.enterprise.EnterpriseRepository;
 import org.ably.circular.enterprise.EnterpriseService;
 import org.ably.circular.enterprise.VerificationStatus;
-import org.ably.circular.exception.BusinessException;
 import org.ably.circular.exception.NotFoundException;
 import org.ably.circular.security.CurrentUserProvider;
 import org.ably.circular.user.UserService;
@@ -88,11 +87,6 @@ public class VerificationServiceImpl implements VerificationService {
         }
 
         return save(document);
-    }
-
-    @Override
-    public void updateVerificationStatus(VerificationStatusUpdateRequest request) {
-
     }
 
 

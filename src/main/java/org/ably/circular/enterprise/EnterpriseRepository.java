@@ -1,5 +1,11 @@
 package org.ably.circular.enterprise;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,6 +19,8 @@ public interface EnterpriseRepository extends JpaRepository<Enterprise,Long> {
        "JOIN l.city c " +
        "WHERE c.name = :cityName")
 List<Enterprise> findByCityName(@Param("cityName") String cityName); //  JPQL query
+
+
 }
 
 
