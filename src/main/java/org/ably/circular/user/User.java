@@ -19,6 +19,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
@@ -39,8 +40,8 @@ import java.util.stream.Collectors;
 )
 
 @EntityListeners(AuditingEntityListener.class)
-//@SQLDelete(sql = "UPDATE users SET deleted = true, deleted_at = NOW() WHERE id = ? AND version = ?")
-//@Where(clause = "deleted = false")
+@SQLDelete(sql = "UPDATE users SET deleted_at = NOW() WHERE id = ?")
+@Where(clause = "deleted_at IS NULL")
 public class User implements UserDetails {
 
     @Id
@@ -70,19 +71,12 @@ public class User implements UserDetails {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
+    @Temporal(TemporalType.TIMESTAMP)
+   private Date deletedAt;
 
-    private Timestamp deletedAt;
 
-    @Version
-    private Long version;
 
-    @OneToMany(
-        mappedBy = "user",
-        cascade = CascadeType.ALL,
-        fetch = FetchType.LAZY,
-        orphanRemoval = true
-    )
-    private Set<Token> tokens;
+
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

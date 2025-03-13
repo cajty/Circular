@@ -4,6 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.ably.circular.MaterialCategory.Category;
+import org.ably.circular.MaterialCategory.CategoryResponse;
+import org.ably.circular.location.ActiveLocationResponse;
+import org.ably.circular.location.Location;
 
 
 import java.util.Date;
@@ -19,8 +23,8 @@ public class MaterialResponse {
     private Long quantity;
     private Float price;
     private MaterialStatus status;
-    private Date listedAt;
     private Date availableUntil;
-    private String categoryName;
+    private CategoryResponse category;
+    private ActiveLocationResponse location;
     private HazardLevel hazardLevel;
 }

@@ -96,19 +96,29 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     @Transactional(readOnly = true)
-    public Set<ActiveLocationResponse> getAllActiveLocations() {
-         return locationRepository.findAllByIsActiveTrue().stream()
-                .map(locationMapper::toActiveLocationResponse)
-                 .collect(Collectors.toSet());
+    public Page<LocationResponse> getAllLocationOfEnterprise(Pageable pageable) {
+        Long enterpriseId = currentUserProvider.getCurrentUserEnterpriseOrThrow().getId();
+        return locationRepository.findAllByEnterprise_Id(enterpriseId, pageable)
+                .map(locationMapper::toResponse);
     }
 
-    @Override
+     @Override
     @Transactional(readOnly = true)
-    public Set<ActiveLocationResponse> getAllLocationOfEnterprise() {
+    public Set<ActiveLocationResponse> getAllActiveLocationsOfEnterprise() {
          Long enterpriseId = currentUserProvider.getCurrentUserEnterpriseOrThrow().getId();
-        return locationRepository.findAllByEnterprise_Id(enterpriseId).stream()
+        return locationRepository.findAllByEnterprise_IdAndIsActiveTrue(enterpriseId).stream()
                 .map(locationMapper::toActiveLocationResponse)
                 .collect(Collectors.toSet());
+    }
+
+
+
+
+
+    @Override
+    public void changeActivityStatus(Long id) {
+        existsById(id);
+        locationRepository.changeLocationStatus(id);
     }
 
     private Location findEntityById(Long id) {

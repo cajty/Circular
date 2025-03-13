@@ -10,6 +10,7 @@ public interface LocationMapper {
 
     @Mapping(target = "cityName", source = "city.name")
     @Mapping(target = "isActive", source = "isActive")
+    @Mapping(target = "type", source = "type")
     LocationResponse toResponse(Location location);
 
 

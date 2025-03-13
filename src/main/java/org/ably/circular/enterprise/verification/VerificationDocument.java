@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.ably.circular.enterprise.Enterprise;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 
 import java.util.Date;
 import java.util.UUID;
@@ -18,6 +21,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "verification_documents")
+
+@SQLDelete(sql = "UPDATE verification_documents SET deleted_at = NOW() WHERE id = ?")
+@Where(clause = "deleted_at IS NULL")
 public class VerificationDocument {
 
     @Id
@@ -49,4 +55,7 @@ public class VerificationDocument {
 
     @Column
     private Boolean isVerified = false;
+
+    @Temporal(TemporalType.TIMESTAMP)
+   private Date deletedAt;
 }

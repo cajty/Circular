@@ -7,6 +7,9 @@ import lombok.*;
 import org.ably.circular.validation.EnumValue;
 import org.mapstruct.Mapping;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 @Getter
 @Setter
 @Builder
@@ -33,6 +36,9 @@ public class MaterialRequest {
     @NotNull(message = "Hazard level is required")
 //    @EnumValue(enumClass = HazardLevel.class, message = "Invalid hazard level")
     private HazardLevel hazardLevel;
+
+    @NotNull(message = "Available until date is required")
+    private Date availableUntil;
 
     @NotNull(message = "Category ID is required")
     private Long categoryId;

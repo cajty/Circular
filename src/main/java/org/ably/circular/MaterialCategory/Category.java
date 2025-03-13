@@ -6,9 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -18,6 +21,9 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "material_categories")
+
+@SQLDelete(sql = "UPDATE material_categories SET deleted_at = NOW() WHERE id = ?")
+@Where(clause = "deleted_at IS NULL")
 public class Category {
 
     @Id
@@ -32,5 +38,8 @@ public class Category {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+   private Date deletedAt;
 
 }

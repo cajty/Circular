@@ -21,7 +21,11 @@ public interface LocationService {
 
     void existsById(Long id);
 
-    Set<ActiveLocationResponse> getAllActiveLocations();
+    Page<LocationResponse> getAllLocationOfEnterprise(Pageable pageable);
 
-    Set<ActiveLocationResponse> getAllLocationOfEnterprise();
+    Set<ActiveLocationResponse> getAllActiveLocationsOfEnterprise();
+
+
+
+    void changeActivityStatus(Long id);
 }

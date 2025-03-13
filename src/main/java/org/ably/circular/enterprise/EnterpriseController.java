@@ -45,7 +45,7 @@ public class EnterpriseController {
     }
 
     @Operation(summary = "Update an existing enterprise")
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
     public ResponseEntity<EnterpriseResponse> update(@PathVariable Long id, @Valid @RequestBody EnterpriseRequest enterpriseRequest) {
         EnterpriseResponse response = enterpriseService.update(id, enterpriseRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);

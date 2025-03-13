@@ -8,9 +8,12 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.ably.circular.enterprise.Enterprise;
 import org.ably.circular.recyclableMaterial.Material;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -21,6 +24,9 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "transactions")
+
+@SQLDelete(sql = "UPDATE transactions SET deleted_at = NOW() WHERE id = ?")
+@Where(clause = "deleted_at IS NULL")
 public class Transaction {
 
     @Id
@@ -59,5 +65,6 @@ public class Transaction {
     )
     private Set<Material> materials;
 
-    private Timestamp deletedAt;
+     @Temporal(TemporalType.TIMESTAMP)
+   private Date deletedAt;
 }

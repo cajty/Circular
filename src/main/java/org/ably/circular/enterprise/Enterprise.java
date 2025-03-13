@@ -11,8 +11,11 @@ import lombok.experimental.SuperBuilder;
 import org.ably.circular.enterprise.verification.VerificationDocument;
 import org.ably.circular.location.Location;
 import org.ably.circular.user.User;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +27,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "enterprises")
+
+@SQLDelete(sql = "UPDATE enterprises SET deleted_at = NOW() WHERE id = ?")
+@Where(clause = "deleted_at IS NULL")
 public class Enterprise {
 
     @Id
@@ -31,6 +37,8 @@ public class Enterprise {
     private Long id;
 
     private String name;
+
+
 
     @NotBlank
     @Size(min = 5, max = 20)
@@ -60,5 +68,6 @@ public class Enterprise {
     @OneToMany(mappedBy = "enterprise", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VerificationDocument> verificationDocuments;
 
-    private Timestamp deletedAt;
+    @Temporal(TemporalType.TIMESTAMP)
+   private Date deletedAt;
 }

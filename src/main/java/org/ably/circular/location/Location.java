@@ -10,9 +10,13 @@ import lombok.experimental.SuperBuilder;
 import org.ably.circular.city.City;
 import org.ably.circular.enterprise.Enterprise;
 import org.ably.circular.recyclableMaterial.Material;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.mapstruct.Mapping;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -22,6 +26,9 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+
+@SQLDelete(sql = "UPDATE locations SET deleted_at = NOW() WHERE id = ?")
+@Where(clause = "deleted_at IS NULL")
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,5 +55,6 @@ public class Location {
     @OneToMany(mappedBy = "location")
     private List<Material> materials;
 
-    private Timestamp deletedAt;
+    @Temporal(TemporalType.TIMESTAMP)
+   private Date deletedAt;
 }
