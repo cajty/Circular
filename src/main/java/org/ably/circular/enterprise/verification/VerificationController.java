@@ -43,11 +43,10 @@ public ResponseEntity<VerificationDocumentResponse> uploadDocument(
     @Operation(summary = "Get documents for an enterprise")
     @GetMapping("/documents/{enterpriseId}")
 //    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public ResponseEntity<List<VerificationDocumentResponse>> getDocuments(
-            @PathVariable Long enterpriseId) {
+    public ResponseEntity<List<VerificationDocumentResponse>> getDocuments() {
 
         List<VerificationDocumentResponse> documents =
-                verificationService.getDocumentsForEnterprise(enterpriseId);
+                verificationService.getDocumentsForEnterprise();
 
         return new ResponseEntity<>(documents, HttpStatus.OK);
     }

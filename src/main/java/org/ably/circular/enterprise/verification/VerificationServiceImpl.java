@@ -34,7 +34,7 @@ public class VerificationServiceImpl implements VerificationService {
     private final VerificationDocumentRepository verificationDocumentRepository;
     private final VerificationMapper verificationMapper;
     private final CurrentUserProvider currentUserProvider;
-    private final UserService userService;
+
 
     private final String UPLOAD_DIR = "uploads/verification-documents/";
 
@@ -94,13 +94,9 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<VerificationDocumentResponse> getDocumentsForEnterprise(Long enterpriseId) {
-        log.debug("Getting documents for enterprise ID: {}", enterpriseId);
+    public List<VerificationDocumentResponse> getDocumentsForEnterprise() {
 
-        // Check if enterprise exists
-        if (!enterpriseRepository.existsById(enterpriseId)) {
-            throw new NotFoundException("Enterprise", enterpriseId);
-        }
+       Long enterpriseId = currentUserProvider.getCurrentUserEnterpriseOrThrow().getId();
 
         List<VerificationDocument> documents = verificationDocumentRepository.findByEnterpriseId(enterpriseId);
 

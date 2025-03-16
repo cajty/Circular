@@ -115,6 +115,14 @@ public class EnterpriseServiceImpl implements EnterpriseService {
 
     @Override
     @Transactional
+    public EnterpriseResponse getEnterpriseOfUser() {
+        return enterpriseMapper.toResponse(
+                currentUserProvider
+                .getCurrentUserEnterpriseOrThrow());
+     }
+
+    @Override
+    @Transactional
     public void updateVerificationStatus(VerificationStatusUpdateRequest request) {
          Enterprise enterprise = findEntityById(request.getEnterpriseId());
          enterprise.setStatus(request.getNewStatus());

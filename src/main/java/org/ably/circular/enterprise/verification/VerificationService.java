@@ -12,5 +12,5 @@ public interface VerificationService {
     VerificationDocumentResponse uploadDocument(VerificationDocumentRequest request) throws IOException;
 
 
-    List<VerificationDocumentResponse> getDocumentsForEnterprise(Long enterpriseId);
+    List<VerificationDocumentResponse> getDocumentsForEnterprise();
 }

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -33,6 +34,7 @@ public class EnterpriseController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+
     @Operation(summary = "Update verification status")
     @PostMapping("/status")
 //    @PreAuthorize("hasRole('ADMIN')")
@@ -45,7 +47,7 @@ public class EnterpriseController {
     }
 
     @Operation(summary = "Update an existing enterprise")
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<EnterpriseResponse> update(@PathVariable Long id, @Valid @RequestBody EnterpriseRequest enterpriseRequest) {
         EnterpriseResponse response = enterpriseService.update(id, enterpriseRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -57,6 +59,11 @@ public class EnterpriseController {
         enterpriseService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+     @GetMapping("/user")
+     public ResponseEntity<EnterpriseResponse> getEnterpriseOfUser() {
+         EnterpriseResponse response = enterpriseService.getEnterpriseOfUser();
+         return new ResponseEntity<>(response, HttpStatus.OK);
+     }
 
 
     @Operation(summary = "Get all enterprises with pagination")

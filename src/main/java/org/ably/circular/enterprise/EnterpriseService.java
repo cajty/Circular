@@ -23,6 +23,8 @@ public interface EnterpriseService {
 
     void updateVerificationStatus(VerificationStatusUpdateRequest request);
 
+    EnterpriseResponse getEnterpriseOfUser();
+
 
 
 
