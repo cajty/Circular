@@ -8,15 +8,15 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.ably.circular.MaterialCategory.Category;
 import org.ably.circular.location.Location;
-import org.ably.circular.transaction.Transaction;
+
+
+import org.ably.circular.transaction.transactionItem.TransactionItem;
 import org.ably.circular.user.User;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,7 +25,6 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "materials")
-
 @SQLDelete(sql = "UPDATE materials SET deleted_at = NOW() WHERE id = ?")
 @Where(clause = "deleted_at IS NULL")
 public class Material {
@@ -41,6 +40,10 @@ public class Material {
 
     @Column(nullable = false)
     private Long quantity;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MaterialUnit unit;
 
     private Float price;
 
@@ -68,13 +71,13 @@ public class Material {
     @Column(nullable = false)
     private HazardLevel hazardLevel;
 
-     @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id")
     private Location location;
 
-     @ManyToMany(mappedBy = "materials")
-    private Set<Transaction> transactions;
+    @OneToMany(mappedBy = "material")
+    private List<TransactionItem> transactionItems;
 
-      @Temporal(TemporalType.TIMESTAMP)
-   private Date deletedAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedAt;
 }

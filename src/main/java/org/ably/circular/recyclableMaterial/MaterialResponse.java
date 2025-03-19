@@ -22,6 +22,7 @@ public class MaterialResponse {
     private String description;
     private Long quantity;
     private Float price;
+     private MaterialUnit unit;
     private MaterialStatus status;
     private Date availableUntil;
     private CategoryResponse category;

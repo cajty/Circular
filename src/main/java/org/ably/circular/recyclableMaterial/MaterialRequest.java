@@ -40,6 +40,9 @@ public class MaterialRequest {
     @NotNull(message = "Available until date is required")
     private Date availableUntil;
 
+    @NotNull(message = "Available until is required")
+    private MaterialUnit unit;
+
     @NotNull(message = "Category ID is required")
     private Long categoryId;
 

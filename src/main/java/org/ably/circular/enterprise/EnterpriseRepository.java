@@ -18,9 +18,9 @@ public interface EnterpriseRepository extends JpaRepository<Enterprise,Long> {
        "JOIN e.locations l " +
        "JOIN l.city c " +
        "WHERE c.name = :cityName")
-List<Enterprise> findByCityName(@Param("cityName") String cityName); //  JPQL query
+List<Enterprise> findByCityName(@Param("cityName") String cityName);
 
-
+boolean existsByRegistrationNumber(String registrationNumber);
 }
 
 

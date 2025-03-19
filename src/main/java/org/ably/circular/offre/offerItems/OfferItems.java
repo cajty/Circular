@@ -1,5 +1,5 @@
-package org.ably.circular.offre.offerItems;
-
-public class OfferItems {
-
-}
+//package org.ably.circular.offre.offerItems;
+//
+//public class OfferItems {
+//
+//}

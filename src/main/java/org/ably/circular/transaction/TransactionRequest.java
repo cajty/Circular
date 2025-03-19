@@ -1,32 +1,30 @@
 package org.ably.circular.transaction;
 
+
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.ably.circular.transaction.transactionItem.TransactionItemRequest;
 
-import java.util.Set;
 
-@Data
+import java.util.List;
+
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TransactionRequest {
-    @NotNull(message = "Quantity is required")
-    @Positive(message = "Quantity must be greater than 0")
-    private Float quantity;
 
-    @NotNull(message = "Price is required")
-    @Positive(message = "Price must be greater than 0")
-    private Float price;
-
-    @NotNull(message = "Buyer  is required")
+    @NotNull(message = "Buyer ID is required")
     private Long buyerId;
 
-    private Set<MaterialForSale> materialsForSale;
-
-    @NotNull(message = "Seller  is required")
+    @NotNull(message = "Seller ID is required")
     private Long sellerId;
+
+    @NotEmpty(message = "Transaction must have at least one item")
+    @Valid
+    private List<TransactionItemRequest> items;
 }

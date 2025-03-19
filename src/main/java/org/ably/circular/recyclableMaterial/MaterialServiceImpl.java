@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.ably.circular.MaterialCategory.CategoryService;
 import org.ably.circular.exception.BusinessException;
 import org.ably.circular.exception.NotFoundException;
+import org.ably.circular.location.LocationService;
 import org.ably.circular.security.CurrentUserProvider;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -25,32 +29,46 @@ public class MaterialServiceImpl implements MaterialService {
     private final MaterialRepository materialRepository;
     private final MaterialMapper materialMapper;
     private final CurrentUserProvider currentUserProvider;
+    private final CategoryService categoryService;
+    private final LocationService locationService;
+
+private List<String> validateError(MaterialRequest request) {
+    List<String> errors = new ArrayList<>();
+
+    try {
+        categoryService.existsById(request.getCategoryId());
+    } catch (NotFoundException e) {
+        errors.add("Category not found with ID: " + request.getCategoryId());
+    }
+
+    try {
+        locationService.existsById(request.getLocationId());
+    } catch (NotFoundException e) {
+        errors.add("Location not found with ID: " + request.getLocationId());
+    }
 
 
-//    private List<String> validateError(Long id ) {
-//
-//        List<String> errors = new ArrayList<>();
-//      if (fieldRepository.countByFarmId(id) >= 10) {
-//    errors.add("Farm can have maximum 5 fields");
-//      }
-//      if(fieldArea >= farmArea){
-//          errors.add("Farm area is full");
-//      }
-//      if(farmArea /farmArea  <= 0.5){
-//          errors.add("Field area is more than 50% of farm area");
-//      }
-//        return errors;
-//    }
+    if (request.getAvailableUntil() != null) {
+        Date now = new Date();
+        if (request.getAvailableUntil().before(now)) {
+            errors.add("Available until date cannot be in the past");
+        }
 
-//    private void validateMaterialRequest(MaterialRequest request) {
-//        if (request == null) {
-//            throw new IllegalArgumentException("Material request cannot be null");
-//        }
-////         List<String> errors = validateError();
-//        if (!errors.isEmpty()) {
-//            throw new BusinessException(errors.toString(), HttpStatus.BAD_REQUEST);
-//        }
-//    }
+    }
+
+    return errors;
+}
+
+private void validateMaterialRequest(MaterialRequest request) {
+    if (request == null) {
+        throw new IllegalArgumentException("Material request cannot be null");
+    }
+
+    List<String> errors = validateError(request);
+    if (!errors.isEmpty()) {
+        throw new BusinessException(String.join(", ", errors), HttpStatus.BAD_REQUEST);
+    }
+}
 
 
     @Override
@@ -80,7 +98,7 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     @Transactional
     public MaterialResponse create(MaterialRequest request) {
-//        validateMaterialRequest(request);
+    validateMaterialRequest(request);
         Material material = materialMapper.toEntity(request);
         material.setStatus(MaterialStatus.RESERVED);
 
@@ -93,7 +111,7 @@ public class MaterialServiceImpl implements MaterialService {
     @Transactional
     public MaterialResponse update(Long id, MaterialRequest request) {
         Material existingMaterial = findEntityById(id);
-//        validateMaterialRequest(request);
+        validateMaterialRequest(request);
         materialMapper.updateEntityFromRequest(request, existingMaterial);
         return materialMapper.toResponse(existingMaterial);
     }
