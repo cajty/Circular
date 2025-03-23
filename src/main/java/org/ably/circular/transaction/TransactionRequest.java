@@ -1,7 +1,5 @@
 package org.ably.circular.transaction;
 
-
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -18,11 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 public class TransactionRequest {
 
-    @NotNull(message = "Buyer ID is required")
-    private Long buyerId;
 
-    @NotNull(message = "Seller ID is required")
-    private Long sellerId;
+    private Long buyerId;
 
     @NotEmpty(message = "Transaction must have at least one item")
     @Valid

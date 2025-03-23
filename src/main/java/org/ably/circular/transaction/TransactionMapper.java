@@ -19,7 +19,6 @@ public interface TransactionMapper {
     @Mapping(target = "createdAt", expression = "java(new java.util.Date())")
     @Mapping(target = "completedAt", ignore = true)
     @Mapping(target = "buyer", source = "buyerId")
-    @Mapping(target = "seller", source = "sellerId")
     Transaction toEntity(TransactionRequest request);
 
 
@@ -28,7 +27,6 @@ public interface TransactionMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "completedAt", ignore = true)
     @Mapping(target = "buyer", source = "buyerId")
-    @Mapping(target = "seller", source = "sellerId")
     void updateEntityFromRequest(TransactionRequest request, @MappingTarget Transaction transaction);
 
 

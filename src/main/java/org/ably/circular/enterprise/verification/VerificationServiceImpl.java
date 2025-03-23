@@ -94,9 +94,8 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<VerificationDocumentResponse> getDocumentsForEnterprise() {
+    public List<VerificationDocumentResponse> getDocumentsForEnterprise(Long enterpriseId) {
 
-       Long enterpriseId = currentUserProvider.getCurrentUserEnterpriseOrThrow().getId();
 
         List<VerificationDocument> documents = verificationDocumentRepository.findByEnterpriseId(enterpriseId);
 

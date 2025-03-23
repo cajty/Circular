@@ -14,8 +14,14 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RegisterRequest {
 
-    @NotBlank(message = "Name is mandatory")
-    private String name;
+    @NotBlank(message = "First name is mandatory")
+    private String firstName;
+
+    @NotBlank(message = "Last name is mandatory")
+    private String lastName;
+
+    @NotBlank(message = "Phone number is mandatory")
+    private String phoneNumber;
 
     @Email(message = "Email should be valid")
     @NotBlank(message = "Email is mandatory")

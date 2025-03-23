@@ -5,11 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.ably.circular.exception.BusinessException;
 import org.ably.circular.exception.NotFoundException;
 import org.ably.circular.location.LocationRepository;
-import org.ably.circular.role.AppRole;
 import org.ably.circular.role.RoleService;
 import org.ably.circular.security.CurrentUserProvider;
 import org.ably.circular.user.User;
 import org.ably.circular.user.UserRepository;
+import org.ably.circular.user.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -18,8 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 
 @Service
@@ -33,7 +31,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     private final EnterpriseMapper enterpriseMapper;
     private final CurrentUserProvider currentUserProvider;
     private final RoleService roleService;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final LocationRepository locationRepository;
 
 private List<String> validateEnterpriseError(EnterpriseRequest request) {
@@ -165,10 +163,11 @@ private void validateVerificationStatusUpdateRequest(VerificationStatusUpdateReq
         validateEnterpriseRequest(request);
         Enterprise enterprise = enterpriseMapper.toEntity(request);
         enterprise.setStatus(VerificationStatus.PENDING);
+         User user = currentUserProvider.getCurrentUserOrThrow();
 
-        UUID useId = currentUserProvider.getCurrentUserIdOrThrow();
-
-        enterprise.setVerifiedBy(useId);
+         user.setEnterprise(enterprise);
+        enterprise.setVerifiedBy(user.getId()
+        );
         return save(enterprise);
 
     }
@@ -243,11 +242,13 @@ private void validateVerificationStatusUpdateRequest(VerificationStatusUpdateReq
          enterprise.setRejectionReason(request.getReason());
 
          if(request.getNewStatus() == VerificationStatus.VERIFIED){
-             User user = currentUserProvider.getCurrentUserOrThrow();
-             user.setRoles(
-                     roleService.getRolesByName("MANAGER")
+              User user = userService.findById(
+                     enterprise.getVerifiedBy()
              );
-             user.setEnterprise(enterprise);
+             user.setRoles(
+                     roleService.getRolesByName("MANAGER","USER")
+             );
+
          }
     }
 

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.ably.circular.user.UserResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,18 +17,15 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AuthController {
 
-    private final AuthService authService;
+    private final AuthServiceImpl authService;
 
 
 
 
-    @Operation
+    @Operation(summary = "Register a new user")
     @PostMapping("/signup")
-    public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest registerUserDto) {
-        if(authService.signup(registerUserDto)) {
-            return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User registration failed");
+    public ResponseEntity<LoginResponse> register(@Valid  @RequestBody RegisterRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(authService.signup(request));
     }
     @Operation(summary = "Authenticate user")
     @PostMapping("/login")
@@ -43,13 +41,13 @@ public class AuthController {
                      .status(HttpStatus.UNAUTHORIZED)
                      .body(new LoginResponse());
         }
-
-     
-
-
-
-
     }
+
+     @Operation(summary = "get that loging user")
+     @GetMapping("/currentUser")
+     public  ResponseEntity<UserResponse> getCurrentUser() {
+            return ResponseEntity.ok(authService.getCurrentUser());
+      }
 
 
 

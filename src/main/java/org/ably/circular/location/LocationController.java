@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 @Tag(name = "Location Controller", description = "Location Management APIs")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @AllArgsConstructor
+@PreAuthorize("hasRole('MANAGER')")
 public class LocationController {
     private  final LocationService locationService;
 

@@ -59,8 +59,14 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private String name;
+   @Column(nullable = false)
+   private String firstName;
+
+   @Column(nullable = false)
+   private String lastName;
+
+   @Column(nullable = false)
+   private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -73,8 +79,6 @@ public class User implements UserDetails {
 
     @Temporal(TemporalType.TIMESTAMP)
    private Date deletedAt;
-
-
 
 
 
@@ -107,9 +111,12 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles
                 .stream()
-                .map(r -> new SimpleGrantedAuthority(r.getName()))
+                .map(r -> new SimpleGrantedAuthority("ROLE_" + r.getName()))
                 .collect(Collectors.toList());
     }
+
+
+
 
 
 

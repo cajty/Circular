@@ -2,8 +2,10 @@ package org.ably.circular.transaction;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.ably.circular.enterprise.Enterprise;
 import org.ably.circular.exception.NotFoundException;
 
+import org.ably.circular.security.CurrentUserProvider;
 import org.ably.circular.transaction.transactionItem.TransactionItem;
 import org.ably.circular.transaction.transactionItem.TransactionItemMapper;
 import org.ably.circular.transaction.transactionItem.TransactionItemRequest;
@@ -27,6 +29,7 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionMapper transactionMapper;
     private final TransactionItemMapper transactionItemMapper;
     private final TransactionItemServiceImpl transactionItemService;
+    private final CurrentUserProvider currentUserProvider;
 
     private void validateTransactionRequest(TransactionRequest request) {
         if (request == null) {
@@ -73,6 +76,9 @@ public class TransactionServiceImpl implements TransactionService {
         validateTransactionRequest(transactionRequest);
 
         Transaction transaction = transactionMapper.toEntity(transactionRequest);
+        Enterprise seller = currentUserProvider.getCurrentUserEnterpriseOrThrow();
+        transaction.setSeller(seller);
+
         transaction = transactionRepository.save(transaction);
 
 

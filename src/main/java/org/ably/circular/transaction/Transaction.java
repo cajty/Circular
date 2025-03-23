@@ -15,6 +15,7 @@ import org.hibernate.annotations.Where;
 import java.util.Date;
 import java.util.List;
 
+
 @Getter
 @Setter
 @SuperBuilder
@@ -49,6 +50,8 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "seller_id")
     private Enterprise seller;
+
+
 
     @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TransactionItem> items;
