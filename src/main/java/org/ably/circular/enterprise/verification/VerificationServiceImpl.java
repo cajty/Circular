@@ -2,13 +2,16 @@ package org.ably.circular.enterprise.verification;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.ably.circular.aws.StorageService;
 import org.ably.circular.enterprise.Enterprise;
 import org.ably.circular.enterprise.EnterpriseRepository;
 import org.ably.circular.enterprise.EnterpriseService;
 import org.ably.circular.enterprise.VerificationStatus;
+import org.ably.circular.exception.BusinessException;
 import org.ably.circular.exception.NotFoundException;
 import org.ably.circular.security.CurrentUserProvider;
 import org.ably.circular.user.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,9 +37,10 @@ public class VerificationServiceImpl implements VerificationService {
     private final VerificationDocumentRepository verificationDocumentRepository;
     private final VerificationMapper verificationMapper;
     private final CurrentUserProvider currentUserProvider;
+    private final StorageService storageService;
 
 
-    private final String UPLOAD_DIR = "uploads/verification-documents/";
+
 
 
     @Override
@@ -49,42 +53,35 @@ public class VerificationServiceImpl implements VerificationService {
     public VerificationDocumentResponse uploadDocument(VerificationDocumentRequest request) throws IOException {
         log.info("Uploading document for enterprise ID: {}",request.getEnterpriseId());
 
-
         Enterprise enterprise = enterpriseService.findEntityById(request.getEnterpriseId());
 
+          if (!(enterprise.getStatus() == VerificationStatus.PENDING || enterprise.getStatus() == VerificationStatus.UNDER_REVIEW)) {
+            enterprise.setStatus(VerificationStatus.UNDER_REVIEW);
+            enterpriseRepository.save(enterprise);
+                throw new BusinessException("Enterprise status is not valid for document upload", HttpStatus.BAD_REQUEST);
+        }
 
 
 
-
-        Path uploadPath = Paths.get(UPLOAD_DIR + request.getEnterpriseId());
-        Files.createDirectories(uploadPath);
-
-
-        String originalFilename = request.getFile().getOriginalFilename();
-        String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
-        String uniqueFilename = UUID.randomUUID() + fileExtension;
-        Path filePath = uploadPath.resolve(uniqueFilename);
-
-
-        Files.copy(request.getFile().getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-
+         enterprise.setStatus(VerificationStatus.UNDER_REVIEW);
         VerificationDocument document = new VerificationDocument();
          UUID useId = currentUserProvider.getCurrentUserIdOrThrow();
          document.setUploadedBy(useId);
         document.setEnterprise(enterprise);
+        document.setFileName(
+                storageService.uploadFile(request.getFile())
+        );
+        document.setFilePath(
+               request.getFile().getOriginalFilename()
+        );
+
         document.setDocumentType(request.getDocumentType());
-        document.setFileName(originalFilename);
         document.setContentType(request.getFile().getContentType());
-        document.setFilePath(filePath.toString());
         document.setUploadedAt(new Date());
 
 
 
-        if (enterprise.getStatus() == VerificationStatus.PENDING) {
-            enterprise.setStatus(VerificationStatus.UNDER_REVIEW);
-            enterpriseRepository.save(enterprise);
-        }
+
 
         return save(document);
     }
