@@ -15,7 +15,6 @@ public class VerificationDocumentResponse {
     private String documentType;
     private String fileName;
     private String contentType;
+     private String filePath;
     private Date uploadedAt;
-    private UUID uploadedBy;
-    private Boolean isVerified;
 }

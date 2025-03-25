@@ -8,7 +8,6 @@ import org.ably.circular.location.LocationRepository;
 import org.ably.circular.role.RoleService;
 import org.ably.circular.security.CurrentUserProvider;
 import org.ably.circular.user.User;
-import org.ably.circular.user.UserRepository;
 import org.ably.circular.user.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -95,9 +94,8 @@ private List<String> validateVerificationStatusUpdateError(VerificationStatusUpd
         }
     }
 
-    // Validate status transition
     if (request.getEnterpriseId() != null && request.getNewStatus() != null) {
-        try {
+
             Enterprise enterprise = findEntityById(request.getEnterpriseId());
             VerificationStatus currentStatus = enterprise.getStatus();
 
@@ -105,14 +103,10 @@ private List<String> validateVerificationStatusUpdateError(VerificationStatusUpd
                 errors.add("Invalid status transition from " + currentStatus + " to " + request.getNewStatus());
             }
 
-            // If status is being rejected, reason is required
             if (request.getNewStatus() == VerificationStatus.REJECTED &&
                 (request.getReason() == null || request.getReason().trim().isEmpty())) {
                 errors.add("Rejection reason is required when setting status to REJECTED");
             }
-        } catch (NotFoundException e) {
-            // Enterprise not found, already handled above
-        }
     }
 
     return errors;
@@ -120,7 +114,7 @@ private List<String> validateVerificationStatusUpdateError(VerificationStatusUpd
 
 private boolean isValidStatusTransition(VerificationStatus currentStatus, VerificationStatus newStatus) {
     if (currentStatus == newStatus) {
-        return true; // No change is always valid
+        return true;
     }
 
     switch (currentStatus) {
@@ -129,9 +123,9 @@ private boolean isValidStatusTransition(VerificationStatus currentStatus, Verifi
         case UNDER_REVIEW:
             return newStatus == VerificationStatus.VERIFIED || newStatus == VerificationStatus.REJECTED;
         case VERIFIED:
-            return newStatus == VerificationStatus.REJECTED; // Can revoke verification
+            return newStatus == VerificationStatus.REJECTED;
         case REJECTED:
-            return newStatus == VerificationStatus.PENDING; // Can reapply
+            return newStatus == VerificationStatus.PENDING;
         default:
             return false;
     }
@@ -150,15 +144,20 @@ private void validateVerificationStatusUpdateRequest(VerificationStatusUpdateReq
 
 
     @Override
-    @Transactional
     public EnterpriseResponse save(Enterprise enterprise) {
         Enterprise savedEnterprise = enterpriseRepository.save(enterprise);
         return enterpriseMapper.toResponse(savedEnterprise);
     }
 
+     @Override
+    @Transactional(readOnly = true)
+    public Enterprise findEntityById(Long id) {
+        return enterpriseRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Enterprise", id));
+    }
+
 
     @Override
-    @Transactional
     public EnterpriseResponse create(EnterpriseRequest request) {
         validateEnterpriseRequest(request);
         Enterprise enterprise = enterpriseMapper.toEntity(request);
@@ -174,20 +173,18 @@ private void validateVerificationStatusUpdateRequest(VerificationStatusUpdateReq
 
 
     @Override
-    @Transactional
     public EnterpriseResponse update(Long id, EnterpriseRequest request) {
         Enterprise existingEnterprise = findEntityById(id);
         validateEnterpriseRequest(request);
 
         enterpriseMapper.updateEntityFromRequest(request, existingEnterprise);
 
-        Enterprise updatedEnterprise = enterpriseRepository.save(existingEnterprise);
-        return enterpriseMapper.toResponse(updatedEnterprise);
+
+        return save(existingEnterprise);
     }
 
 
     @Override
-    @Transactional
     public void delete(Long id) {
         if (!enterpriseRepository.existsById(id)) {
             throw new NotFoundException("Enterprise", id);
@@ -219,15 +216,10 @@ private void validateVerificationStatusUpdateRequest(VerificationStatusUpdateReq
         }
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public Enterprise findEntityById(Long id) {
-        return enterpriseRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Enterprise", id));
-    }
+
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public EnterpriseResponse getEnterpriseOfUser() {
         return enterpriseMapper.toResponse(
                 currentUserProvider
@@ -235,7 +227,6 @@ private void validateVerificationStatusUpdateRequest(VerificationStatusUpdateReq
      }
 
     @Override
-    @Transactional
     public void updateVerificationStatus(VerificationStatusUpdateRequest request) {
          Enterprise enterprise = findEntityById(request.getEnterpriseId());
          enterprise.setStatus(request.getNewStatus());
@@ -246,7 +237,7 @@ private void validateVerificationStatusUpdateRequest(VerificationStatusUpdateReq
                      enterprise.getVerifiedBy()
              );
              user.setRoles(
-                     roleService.getRolesByName("MANAGER","USER")
+                     roleService.getRolesByName("MANAGER")
              );
 
          }

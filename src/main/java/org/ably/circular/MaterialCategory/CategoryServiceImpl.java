@@ -45,14 +45,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Transactional
     public CategoryResponse save(Category category) {
         Category savedCategory = categoryRepository.save(category);
         return categoryMapper.toResponse(savedCategory);
     }
 
     @Override
-    @Transactional
     public CategoryResponse create(CategoryRequest request) {
         validateCategoryRequest(request);
         Category category = categoryMapper.toEntity(request);
@@ -61,7 +59,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Transactional
     public CategoryResponse update(Long id, CategoryRequest request) {
          validateCategoryRequest(request);
         Category existingCategory = findEntityById(id);
@@ -71,7 +68,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Transactional
     public void delete(Long id) {
         existsById(id);
         categoryRepository.deleteById(id);
@@ -93,7 +89,6 @@ public class CategoryServiceImpl implements CategoryService {
 
 
     @Override
-    @Transactional
     public void changeActivityStatus(Long id) {
          existsById(id);
        try {
@@ -104,6 +99,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Set<Category> findAllActiveCategory() {
         return categoryRepository.findAllByIsActiveTrue();
     }

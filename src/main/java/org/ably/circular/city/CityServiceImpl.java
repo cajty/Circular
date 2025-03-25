@@ -41,14 +41,12 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    @Transactional
     public CityResponse save(City city) {
         City savedCity = cityRepository.save(city);
         return cityMapper.toResponse(savedCity);
     }
 
     @Override
-    @Transactional
     public CityResponse create(CityRequest request) {
         validateCityRequest(request);
         City city = cityMapper.toEntity(request);
@@ -57,7 +55,6 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    @Transactional
     public CityResponse update(Long id, CityRequest request) {
         validateCityRequest(request);
         City existingCity = findEntityById(id);
@@ -67,7 +64,6 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    @Transactional
     public void delete(Long id) {
         existsById(id);
         cityRepository.deleteById(id);
@@ -89,14 +85,12 @@ public class CityServiceImpl implements CityService {
  }
 
     @Override
-    @Transactional
     public void changeActivityStatus(Long id) {
         existsById(id);
         cityRepository.changeActivityStatus(id);
     }
 
     @Override
-    @Transactional
     public Set<ActiveCityResponse> getAllActiveCities() {
         return cityRepository.findAllByIsActiveTrue().stream()
                 .map(cityMapper::toActiveCityResponse)

@@ -8,19 +8,13 @@ import org.ably.circular.enterprise.EnterpriseRepository;
 import org.ably.circular.enterprise.EnterpriseService;
 import org.ably.circular.enterprise.VerificationStatus;
 import org.ably.circular.exception.BusinessException;
-import org.ably.circular.exception.NotFoundException;
 import org.ably.circular.security.CurrentUserProvider;
-import org.ably.circular.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -63,24 +57,17 @@ public class VerificationServiceImpl implements VerificationService {
 
 
 
-         enterprise.setStatus(VerificationStatus.UNDER_REVIEW);
-        VerificationDocument document = new VerificationDocument();
-         UUID useId = currentUserProvider.getCurrentUserIdOrThrow();
-         document.setUploadedBy(useId);
-        document.setEnterprise(enterprise);
-        document.setFileName(
-                storageService.uploadFile(request.getFile())
-        );
-        document.setFilePath(
-               request.getFile().getOriginalFilename()
-        );
-
-        document.setDocumentType(request.getDocumentType());
-        document.setContentType(request.getFile().getContentType());
-        document.setUploadedAt(new Date());
-
-
-
+       enterprise.setStatus(VerificationStatus.UNDER_REVIEW);
+       UUID useId = currentUserProvider.getCurrentUserIdOrThrow();
+       VerificationDocument document = VerificationDocument.builder()
+               .uploadedBy(useId)
+               .enterprise(enterprise)
+               .fileName(request.getFile().getOriginalFilename())
+               .filePath(storageService.uploadFile(request.getFile()))
+               .documentType(request.getDocumentType())
+               .contentType(request.getFile().getContentType())
+               .uploadedAt(new Date())
+               .build();
 
 
         return save(document);
