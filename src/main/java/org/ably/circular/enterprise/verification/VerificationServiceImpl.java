@@ -39,7 +39,9 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Override
     public VerificationDocumentResponse save(VerificationDocument document) {
-       return  verificationMapper.toResponse(verificationDocumentRepository.save(document));
+       return  verificationMapper.toResponse(
+               verificationDocumentRepository.save(document)
+       );
 
     }
 
@@ -50,11 +52,9 @@ public class VerificationServiceImpl implements VerificationService {
         Enterprise enterprise = enterpriseService.findEntityById(request.getEnterpriseId());
 
           if (!(enterprise.getStatus() == VerificationStatus.PENDING || enterprise.getStatus() == VerificationStatus.UNDER_REVIEW)) {
-            enterprise.setStatus(VerificationStatus.UNDER_REVIEW);
             enterpriseRepository.save(enterprise);
                 throw new BusinessException("Enterprise status is not valid for document upload", HttpStatus.BAD_REQUEST);
         }
-
 
 
        enterprise.setStatus(VerificationStatus.UNDER_REVIEW);
@@ -80,33 +80,9 @@ public class VerificationServiceImpl implements VerificationService {
     @Transactional(readOnly = true)
     public List<VerificationDocumentResponse> getDocumentsForEnterprise(Long enterpriseId) {
 
-
         List<VerificationDocument> documents = verificationDocumentRepository.findByEnterpriseId(enterpriseId);
 
         return verificationMapper.toResponseList(documents);
     }
 
-
-    private boolean isValidStatusTransition(VerificationStatus currentStatus, VerificationStatus newStatus) {
-        if (currentStatus == null || newStatus == null) {
-            return false;
-        }
-
-        switch (currentStatus) {
-            case PENDING:
-                return newStatus == VerificationStatus.UNDER_REVIEW || newStatus == VerificationStatus.REJECTED;
-
-            case UNDER_REVIEW:
-                return newStatus == VerificationStatus.VERIFIED || newStatus == VerificationStatus.REJECTED;
-
-            case VERIFIED:
-                return newStatus == VerificationStatus.REJECTED; // Can revoke verification
-
-            case REJECTED:
-                return newStatus == VerificationStatus.PENDING; // Can reapply
-
-            default:
-                return false;
-        }
-    }
 }

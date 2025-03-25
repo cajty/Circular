@@ -11,6 +11,7 @@ import org.ably.circular.user.User;
 import org.ably.circular.user.UserService;
 import org.ably.circular.user.UserStatus;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -96,6 +97,7 @@ class EnterpriseServiceImplTest {
     }
 
     @Test
+    @DisplayName("findById: When Enterprise Does Not Exist, Should Throw NotFoundException")
     void findById_WhenEnterpriseExists_ShouldReturnEnterprise() {
         // Arrange
         when(enterpriseRepository.findById(1L)).thenReturn(Optional.of(enterprise));
@@ -116,6 +118,7 @@ class EnterpriseServiceImplTest {
     }
 
     @Test
+    @DisplayName("create: With Valid Request, Should Create Enterprise")
     void findById_WhenEnterpriseDoesNotExist_ShouldThrowNotFoundException() {
         // Arrange
         when(enterpriseRepository.findById(1L)).thenReturn(Optional.empty());
@@ -127,6 +130,7 @@ class EnterpriseServiceImplTest {
     }
 
     @Test
+    @DisplayName("create: With Valid Request, Should Create Enterprise")
     void create_WithValidRequest_ShouldCreateEnterprise() {
         // Arrange
         when(enterpriseMapper.toEntity(enterpriseRequest)).thenReturn(enterprise);
@@ -148,6 +152,7 @@ class EnterpriseServiceImplTest {
     }
 
     @Test
+    @DisplayName("create: With Duplicate Registration Number, Should Throw BusinessException")
     void create_WithDuplicateRegistrationNumber_ShouldThrowBusinessException() {
         // Arrange
         when(enterpriseRepository.existsByRegistrationNumber("TEST12345")).thenReturn(true);
@@ -160,6 +165,7 @@ class EnterpriseServiceImplTest {
     }
 
     @Test
+    @DisplayName("update: With Valid Request, Should Update Enterprise")
     void update_WithValidRequest_ShouldUpdateEnterprise() {
         // Arrange
         when(enterpriseRepository.findById(1L)).thenReturn(Optional.of(enterprise));
@@ -178,6 +184,7 @@ class EnterpriseServiceImplTest {
     }
 
     @Test
+    @DisplayName("delete: When Enterprise Exists, Should Delete Enterprise")
     void delete_WhenEnterpriseExists_ShouldDeleteEnterprise() {
         // Arrange
         when(enterpriseRepository.existsById(1L)).thenReturn(true);
@@ -191,6 +198,7 @@ class EnterpriseServiceImplTest {
     }
 
     @Test
+    @DisplayName("delete: When Enterprise Does Not Exist, Should Throw NotFoundException")
     void delete_WhenEnterpriseDoesNotExist_ShouldThrowNotFoundException() {
         // Arrange
         when(enterpriseRepository.existsById(1L)).thenReturn(false);
@@ -202,6 +210,7 @@ class EnterpriseServiceImplTest {
     }
 
     @Test
+    @DisplayName("findAll: Should Return Page Of Enterprises")
     void findAll_ShouldReturnPageOfEnterprises() {
         // Arrange
         List<Enterprise> enterprises = Collections.singletonList(enterprise);
@@ -223,6 +232,7 @@ class EnterpriseServiceImplTest {
     }
 
     @Test
+    @DisplayName("getEnterpriseOfUser: Should Return Current User Enterprise")
     void getEnterpriseOfUser_ShouldReturnCurrentUserEnterprise() {
         // Arrange
         when(currentUserProvider.getCurrentUserEnterpriseOrThrow()).thenReturn(enterprise);
@@ -263,6 +273,7 @@ class EnterpriseServiceImplTest {
 //    }
 
     @Test
+    @DisplayName("updateVerificationStatus: To Rejected, Should Update Status With Reason")
     void updateVerificationStatus_ToRejected_ShouldUpdateStatusWithReason() {
         // Arrange
         String rejectionReason = "Failed verification checks";

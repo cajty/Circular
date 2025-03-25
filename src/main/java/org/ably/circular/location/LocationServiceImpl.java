@@ -30,7 +30,6 @@ public class LocationServiceImpl implements LocationService {
         if (request == null) {
             throw new IllegalArgumentException("Location request cannot be null");
         }
-        // Additional validation logic
     }
 
     @Override

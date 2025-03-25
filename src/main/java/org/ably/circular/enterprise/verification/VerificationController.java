@@ -2,11 +2,9 @@ package org.ably.circular.enterprise.verification;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-import org.ably.circular.security.CurrentUserProvider;
-import org.ably.circular.user.User;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +40,6 @@ public ResponseEntity<VerificationDocumentResponse> uploadDocument(
 
     @Operation(summary = "Get documents for an enterprise")
     @GetMapping("/documents/{enterpriseId}")
-//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<VerificationDocumentResponse>> getDocuments(@PathVariable Long enterpriseId) {
 
         List<VerificationDocumentResponse> documents =

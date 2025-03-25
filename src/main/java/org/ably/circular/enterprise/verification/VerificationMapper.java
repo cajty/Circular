@@ -13,7 +13,7 @@ public interface VerificationMapper {
 
     VerificationDocumentResponse toResponse(VerificationDocument document);
 
-    VerificationDocument toEntity(VerificationDocumentRequest request);
+
 
     List<VerificationDocumentResponse> toResponseList(List<VerificationDocument> documents);
 }
