@@ -53,8 +53,6 @@ public class VerificationDocument {
     @Column(nullable = false)
     private UUID uploadedBy;
 
-    @Column
-    private Boolean isVerified = false;
 
     @Temporal(TemporalType.TIMESTAMP)
    private Date deletedAt;
