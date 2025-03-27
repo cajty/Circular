@@ -1,7 +1,5 @@
 package org.ably.circular.config;
 
-
-
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
@@ -12,16 +10,11 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.servers.Server;
 
-/**
- * To access the OpenAPI documentation, go to <a href="http://localhost:8082/swagger-ui.html">...</a>
- * The @OpenAPIDefinition annotation is used to define the metadata of the OpenAPI specification.
- * The @SecurityScheme annotation is used to define a security scheme that can be used by the operations.
- */
 @OpenAPIDefinition(
         info = @Info(
-                title = "Bank Management System",
+                title = "Circular Application API",
                 version = "v1",
-                description = "A simple bank management system",
+                description = "Circular Application API Documentation",
                 contact = @Contact(
                         name = "Ayoub Belyamane",
                         url = "https://ayoubbly.ma"
@@ -29,15 +22,13 @@ import io.swagger.v3.oas.annotations.servers.Server;
                 license = @License(
                         name = "MIT License",
                         url = "https://opensource.org/licenses/MIT"
-                ),
-                termsOfService = "some terms of service"
+                )
         ),
-
         servers = {
                 @Server(
-                        url = "http://localhost:8082",
+                        url = "${server.url:http://localhost:8080}",
                         description = "Local server"
-                ),
+                )
         },
         security = {
                 @SecurityRequirement(

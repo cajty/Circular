@@ -1,7 +1,7 @@
 package org.ably.circular.config;
 
 import lombok.AllArgsConstructor;
-import org.ably.bankingsecurity.service.UserService;
+import org.ably.circular.user.UserServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,7 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 @AllArgsConstructor
 public class ApplicationConfig {
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
     @Bean
     UserDetailsService userDetailsService() {

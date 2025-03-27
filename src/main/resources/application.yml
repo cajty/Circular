@@ -12,9 +12,6 @@ spring:
     hibernate:
       ddl-auto: update
 
-
-
-
 server:
   port: ${SERVER_PORT}
 
@@ -25,13 +22,36 @@ springdoc:
   swagger-ui:
     enabled: true
     path: /swagger-ui.html
-  packages-to-scan: com.bankapp.server.controller
-  paths-to-match: /api/**
+    disable-swagger-default-url: true
+    display-request-duration: true
+    tags-sorter: alpha
+    operations-sorter: alpha
+  packages-to-scan: org.ably.circular
+  paths-to-match: /**
+  show-actuator: false
+  default-produces-media-type: application/json
+  default-consumes-media-type: application/json
 
 security:
   jwt:
     expiration-time: ${JWT_EXPIRATION}
     secret-key: ${JWT_SECRET}
+  cors:
+    allowed-origins: ${ALLOWED_ORIGINS}
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+    region:
+      static: ${AWS_REGION}
+    stack:
+      auto: false
+
+application:
+  bucket:
+    name: ${AWS_BUCKET_NAME}
 
 logging:
   level:
