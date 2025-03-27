@@ -50,7 +50,7 @@ private List<String> validateError(MaterialRequest request) {
 
     if (request.getAvailableUntil() != null) {
         Date now = new Date();
-        if (request.getAvailableUntil().before(now)) {
+        if (request.getAvailableUntil().before(now) && request.getStatus() != MaterialStatus.EXPIRED) {
             errors.add("Available until date cannot be in the past");
         }
 

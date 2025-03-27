@@ -20,6 +20,6 @@ public class VerificationDocumentRequest {
     private String documentType;
 
     @NotNull(message = "File is required")
-@Max(value = 524288, message = "File size must be less than 512KB")
+    @Max(value = 524288, message = "File size must be less than 512KB")
     private MultipartFile file;
 }

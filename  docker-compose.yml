@@ -1,0 +1,53 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: circular-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: circular_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d circular_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - circular-network
+
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: circular-app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: circular-postgres
+      DB_PORT: 5432
+      DB_NAME: circular_db
+      DB_USERNAME: admin
+      DB_PASSWORD: admin
+      SERVER_PORT: 8080
+      JWT_SECRET: Your32CharacterLongBase64EncodedSecretKeydvererberbbe
+      JWT_EXPIRATION: 86400000
+      ALLOWED_ORIGINS: http://localhost:4200,http://localhost:8080
+      AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}
+      AWS_SECRET_KEY: ${AWS_SECRET_KEY}
+      AWS_REGION: ${AWS_REGION}
+      AWS_BUCKET_NAME: ${AWS_BUCKET_NAME}
+    networks:
+      - circular-network
+
+volumes:
+  postgres-data:
+
+networks:
+  circular-network:
+    driver: bridge

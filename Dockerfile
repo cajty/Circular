@@ -6,6 +6,9 @@ COPY pom.xml .
 COPY mvnw .
 COPY .mvn .mvn
 
+# Make the Maven wrapper executable
+RUN chmod +x ./mvnw
+
 # Download dependencies (will be cached by Docker if pom.xml doesn't change)
 RUN ./mvnw dependency:go-offline -B
 
@@ -26,24 +29,20 @@ USER springuser
 # Copy the built JAR file
 COPY --from=build /app/target/*.jar app.jar
 
-# Environment variables for configuration
-ENV DB_HOST=postgres
-ENV DB_PORT=5432
-ENV DB_NAME=circular
-ENV DB_USERNAME=circular_user
-ENV DB_PASSWORD=circular_pass
-ENV SERVER_PORT=8080
-ENV JWT_EXPIRATION=86400000
-ENV JWT_SECRET=default_secret_to_be_replaced_in_production
-ENV ALLOWED_ORIGINS=http://localhost:4200,http://localhost:8080
-ENV AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
-ENV AWS_SECRET_KEY=${AWS_SECRET_KEY}
-ENV AWS_REGION=${AWS_REGION}
-ENV AWS_BUCKET_NAME=${AWS_BUCKET_NAME}
-
+# Environment variables are set through docker-compose or docker run command
+# These are just default values that will be overridden
+ENV DB_HOST=postgres \
+    DB_PORT=5432 \
+    DB_NAME=circular_db \
+    DB_USERNAME=admin \
+    DB_PASSWORD=admin \
+    SERVER_PORT=8080 \
+    JWT_EXPIRATION=86400000 \
+    JWT_SECRET=Your32CharacterLongBase64EncodedSecretKeydvererberbbe \
+    ALLOWED_ORIGINS=http://localhost:4200,http://localhost:8080
 
 # Expose port 8080
 EXPOSE 8080
 
-# Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Wait for PostgreSQL to be ready before starting the application
+CMD ["java", "-jar", "app.jar"]
