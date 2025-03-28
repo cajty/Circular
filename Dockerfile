@@ -31,7 +31,7 @@ COPY --from=build /app/target/*.jar app.jar
 
 # Environment variables are set through docker-compose or docker run command
 # These are just default values that will be overridden
-ENV DB_HOST=postgres \
+ENV DB_HOST=circular-postgres \
     DB_PORT=5432 \
     DB_NAME=circular_db \
     DB_USERNAME=admin \

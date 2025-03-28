@@ -20,4 +20,7 @@ public interface MaterialService {
     void existsById(Long id);
 
      Page<MaterialResponse> search(String name, Float minPrice, Float maxPrice, MaterialStatus status, Pageable pageable);
+
+
+ int countAll(String name);
 }

@@ -16,46 +16,46 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @Tag(name = "Material Controller", description = "Material Management APIs")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@PreAuthorize("hasRole('MANAGER')")
 public class MaterialController {
 
     private final MaterialService materialService;
 
+    @PreAuthorize("hasRole('MANAGER')")
     @Operation(summary = "Create a new material")
     @PostMapping
     public ResponseEntity<MaterialResponse> create(@Valid @RequestBody MaterialRequest materialRequest) {
         MaterialResponse response = materialService.create(materialRequest);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
+    @PreAuthorize("hasRole('MANAGER')")
     @Operation(summary = "Get a material by ID")
     @GetMapping("/{id}")
     public ResponseEntity<MaterialResponse> getById(@PathVariable Long id) {
         MaterialResponse response = materialService.findById(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
+    @PreAuthorize("hasRole('MANAGER')")
     @Operation(summary = "Update an existing material")
     @PutMapping("/{id}")
     public ResponseEntity<MaterialResponse> update(@PathVariable Long id,@Valid @RequestBody MaterialRequest materialRequest) {
         MaterialResponse response = materialService.update(id, materialRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
+    @PreAuthorize("hasRole('MANAGER')")
     @Operation(summary = "Delete a material by ID")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         materialService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
+    @PreAuthorize("hasRole('MANAGER')")
     @Operation(summary = "Get all materials with pagination")
     @GetMapping
     public ResponseEntity<Page<MaterialResponse>> getAll(Pageable pageable) {
         Page<MaterialResponse> response = materialService.findAll(pageable);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
+    @PreAuthorize("hasRole('MANAGER')")
      @Operation(summary = "Search materials with filters")
     @GetMapping("/search")
     public ResponseEntity<Page<MaterialResponse>> search(
@@ -66,6 +66,13 @@ public class MaterialController {
             Pageable pageable) {
         Page<MaterialResponse> response = materialService.search(name, minPrice, maxPrice, status, pageable);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "cout materail")
+    @GetMapping("/count-materail/{name}")
+    public ResponseEntity<Integer> countAll(@PathVariable String name ){
+        int cout = materialService.countAll(name);
+        return new ResponseEntity<>(cout, HttpStatus.OK);
     }
 
 }

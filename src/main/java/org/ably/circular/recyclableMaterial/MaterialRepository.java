@@ -17,4 +17,17 @@ public interface MaterialRepository extends JpaRepository<Material, Long> , JpaS
    @Param("newStatus") MaterialStatus newStatus,
    @Param("now") Date now
    );
+
+
+@Query("select count(m) from Material m " +
+        "JOIN Location l on l = m.location " +
+        "JOIN City c on " +
+        "c = l.city where c.name = :name " )
+   int countAll(
+           @Param("name") String name
+);
+
+
+
+
 }

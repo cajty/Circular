@@ -50,7 +50,7 @@ public class EnterpriseController {
 
     @Operation(summary = "Update an existing enterprise")
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasAnyRole('MANAGER','USER')")
     public ResponseEntity<EnterpriseResponse> update(@PathVariable Long id, @Valid @RequestBody EnterpriseRequest enterpriseRequest) {
         EnterpriseResponse response = enterpriseService.update(id, enterpriseRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -58,7 +58,7 @@ public class EnterpriseController {
 
     @Operation(summary = "Delete an enterprise by ID")
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('MANAGER')")
+   @PreAuthorize("hasAnyRole('MANAGER','USER')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         enterpriseService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

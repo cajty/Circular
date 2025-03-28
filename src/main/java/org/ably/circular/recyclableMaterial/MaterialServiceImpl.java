@@ -89,6 +89,11 @@ private void validateMaterialRequest(MaterialRequest request) {
     }
 
     @Override
+    public int countAll(String name) {
+        return materialRepository.countAll(name);
+    }
+
+    @Override
     @Transactional
     public MaterialResponse save(Material material) {
         Material savedMaterial = materialRepository.save(material);
